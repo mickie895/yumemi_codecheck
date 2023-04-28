@@ -17,8 +17,7 @@ jobs:
           route: GET /repos/yumemi-inc/android-engineer-codecheck/issues
           sort: created
           direction: asc
-          # この条件であれば自分が作成したissueは含まれていない
-          per_page: 10
+          pulls: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: output_issues_data
@@ -28,6 +27,8 @@ jobs:
       - run: echo -e '${{ steps.output_issues_data.outputs.value }}'
 
   get-myrepo-milestones:
+    # エラー原因が分かりづらくなるため動作させない
+    if: false
     runs-on: ubuntu-latest
     outputs:
       milestones: ${{ steps.output_milestones_data.outputs.value }}
@@ -45,7 +46,9 @@ jobs:
           echo "::set-output name=value::${result}"
 
   get-myrepo-issues:
-    if: github.repository != 'yumemi-inc/android-engineer-codecheck'
+    # エラー原因が分かりづらくなるため動作させない
+    if: false
+    # if: github.repository != 'yumemi-inc/android-engineer-codecheck'
     runs-on: ubuntu-latest
     outputs:
       issues: ${{ steps.output_issues_data.outputs.value }}
