@@ -23,8 +23,25 @@ jobs:
       - id: output_issues_data
         run: |
           result=$(echo '${{ steps.get_issues_data.outputs.data }}' | sed -z 's/\n/%0A/g' | sed -z 's/\r/%0D/g')
-          echo "value=${result}" >> $GITHUB_OUTPUT
+          echo "::set-output name=value::${result}"
       - run: echo -e '${{ steps.output_issues_data.outputs.value }}'
+
+  get-myrepo-milestones:
+    runs-on: ubuntu-latest
+    outputs:
+      milestones: ${{ steps.output_milestones_data.outputs.value }}
+    steps:
+      - name: Getting Milestones data
+        id: get_milestones_data
+        uses: octokit/request-action@v2.1.7
+        with:
+          route: GET /repos/${{ github.repository }}/milestones
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - id: output_milestones_data
+        run: |
+          result=$(echo '${{ steps.get_milestones_data.outputs.data }}' | sed -z 's/\n/%0A/g' | sed -z 's/\r/%0D/g')
+          echo "::set-output name=value::${result}"
 
   get-myrepo-issues:
     if: github.repository != 'yumemi-inc/android-engineer-codecheck'
@@ -48,7 +65,7 @@ jobs:
       - run: echo -e '${{ steps.output_issues_data.outputs.value }}'
 
   create-issues:
-    needs: [get-issues, get-myrepo-issues]
+    needs: [get-issues, get-myrepo-issues, get-myrepo-milestones]
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
