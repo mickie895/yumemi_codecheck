@@ -103,6 +103,7 @@ jobs:
         route: GET /repos/yumemi-inc/android-engineer-codecheck/issues
         sort: created
         direction: asc
+        labels: 初級,中級,ボーナス
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - id: output_issues_data
