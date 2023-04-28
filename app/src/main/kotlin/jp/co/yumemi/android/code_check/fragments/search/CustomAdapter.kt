@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.*
 import jp.co.yumemi.android.code_check.R
-import jp.co.yumemi.android.code_check.item
+import jp.co.yumemi.android.code_check.data.item
 
 val diff_util = object : DiffUtil.ItemCallback<item>() {
     override fun areItemsTheSame(oldItem: item, newItem: item): Boolean {

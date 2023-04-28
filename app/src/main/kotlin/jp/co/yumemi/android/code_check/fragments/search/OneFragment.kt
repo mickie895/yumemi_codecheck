@@ -7,11 +7,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import jp.co.yumemi.android.code_check.CustomAdapter
-import jp.co.yumemi.android.code_check.OneViewModel
 import jp.co.yumemi.android.code_check.R
+import jp.co.yumemi.android.code_check.data.OneViewModel
+import jp.co.yumemi.android.code_check.data.item
 import jp.co.yumemi.android.code_check.databinding.FragmentOneBinding
-import jp.co.yumemi.android.code_check.item
 
 class OneFragment : Fragment(R.layout.fragment_one) {
 
