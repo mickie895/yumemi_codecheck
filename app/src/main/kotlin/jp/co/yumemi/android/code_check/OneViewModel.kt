@@ -23,7 +23,7 @@ import java.util.*
  * TwoFragment で使う
  */
 class OneViewModel(
-    val context: Context
+    val context: Context,
 ) : ViewModel() {
 
     // 検索結果
@@ -31,12 +31,12 @@ class OneViewModel(
         val client = HttpClient(Android)
 
         return@runBlocking GlobalScope.async {
-            val response: HttpResponse = client?.get("https://api.github.com/search/repositories") {
+            val response: HttpResponse = client.get("https://api.github.com/search/repositories") {
                 header("Accept", "application/vnd.github.v3+json")
                 parameter("q", inputText)
             }
 
-            val jsonBody = JSONObject(response.receive<String>())
+            val jsonBody = JSONObject(response.body<String>())
 
             val jsonItems = jsonBody.optJSONArray("items")!!
 
@@ -63,8 +63,8 @@ class OneViewModel(
                         stargazersCount = stargazersCount,
                         watchersCount = watchersCount,
                         forksCount = forksCount,
-                        openIssuesCount = openIssuesCount
-                    )
+                        openIssuesCount = openIssuesCount,
+                    ),
                 )
             }
 

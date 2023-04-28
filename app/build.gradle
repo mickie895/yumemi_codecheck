@@ -36,6 +36,36 @@ android {
         viewBinding true
     }
     namespace 'jp.co.yumemi.android.code_check'
+
+    lint{
+        // If set to true, turns off analysis progress reporting by lint.
+        quiet true
+        // if true, treat all warnings as errors
+        warningsAsErrors true
+    }
+}
+
+configurations {
+    ktlint
+}
+
+task ktlint(type: JavaExec, group: "verigication"){
+    description = "Check Kotlin code style."
+    mainClass.set("com.pinterest.ktlint.Main")
+    classpath = configurations.ktlint
+    args "src/**/*.kt", "!src/**/Example*Test.kt", "--color", "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
+}
+
+task all_lint(){
+    dependsOn(lint)
+    ktlint
+}
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    mainClass.set("com.pinterest.ktlint.Main")
+    classpath = configurations.ktlint
+    args "-F", "src/**/*.kt", "!src/**/Example*Test.kt"
 }
 
 dependencies {
@@ -61,4 +91,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    ktlint 'com.pinterest:ktlint:0.49.0'
 }
