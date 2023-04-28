@@ -17,7 +17,8 @@ jobs:
           route: GET /repos/yumemi-inc/android-engineer-codecheck/issues
           sort: created
           direction: asc
-          per_page: 9
+          # この条件であれば自分が作成したissueは含まれていない
+          per_page: 10
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: output_issues_data
@@ -64,7 +65,17 @@ jobs:
           echo "::set-output name=value::${result}"
       - run: echo -e '${{ steps.output_issues_data.outputs.value }}'
 
+  sample-output:
+    needs: [get-issues]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check output
+        id: check-echo
+        run: echo '${{needs.get-issues.outputs.issues}}' | jq '.[].title'
+
   create-issues:
+    # エラー原因が分かりづらくなるため動作させない
+    if: false
     needs: [get-issues, get-myrepo-issues, get-myrepo-milestones]
     runs-on: ubuntu-latest
     strategy:
