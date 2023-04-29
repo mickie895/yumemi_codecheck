@@ -3,73 +3,44 @@
  */
 package jp.co.yumemi.android.codecheck.data
 
-import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.engine.android.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import jp.co.yumemi.android.codecheck.R
+import androidx.lifecycle.viewModelScope
 import jp.co.yumemi.android.codecheck.TopActivity.Companion.lastSearchDate
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
-import org.json.JSONObject
-import java.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.Date
 
 /**
  * TwoFragment で使う
  */
-class SearchFragmentViewModel(
-    val context: Context,
-) : ViewModel() {
+class SearchFragmentViewModel : ViewModel() {
+    // TODO: DIコンテナの導入時に注入させる
+    private val searchApi: GithubApiRepository = GithubApiRepository()
 
-    // 検索結果
-    fun searchResults(inputText: String): List<RepositoryProperty> = runBlocking {
-        val client = HttpClient(Android)
+    /**
+     * 検索結果の実際の格納先
+     */
+    private val searchResultSource: MutableLiveData<List<RepositoryProperty>> = MutableLiveData()
 
-        return@runBlocking GlobalScope.async {
-            val response: HttpResponse = client.get("https://api.github.com/search/repositories") {
-                header("Accept", "application/vnd.github.v3+json")
-                parameter("q", inputText)
-            }
+    /**
+     * UIで利用する検索結果の一覧のLiveData
+     */
+    val searchResult: LiveData<List<RepositoryProperty>> = searchResultSource
 
-            val jsonBody = JSONObject(response.body<String>())
+    /**
+     * リポジトリの検索をRepository層に依頼する
+     */
+    fun searchRepository(inputText: String) {
+        // TODO: DIか何かで値を共有するか、他の方法を考える
+        lastSearchDate = Date()
 
-            val jsonItems = jsonBody.optJSONArray("items")!!
-
-            val items = mutableListOf<RepositoryProperty>()
-
-            /**
-             * アイテムの個数分ループする
-             */
-            for (i in 0 until jsonItems.length()) {
-                val jsonItem = jsonItems.optJSONObject(i)!!
-                val name = jsonItem.optString("full_name")
-                val ownerIconUrl = jsonItem.optJSONObject("owner")!!.optString("avatar_url")
-                val language = jsonItem.optString("language")
-                val stargazersCount = jsonItem.optLong("stargazers_count")
-                val watchersCount = jsonItem.optLong("watchers_count")
-                val forksCount = jsonItem.optLong("forks_conut")
-                val openIssuesCount = jsonItem.optLong("open_issues_count")
-
-                items.add(
-                    RepositoryProperty(
-                        name = name,
-                        ownerIconUrl = ownerIconUrl,
-                        language = context.getString(R.string.written_language, language),
-                        stargazersCount = stargazersCount,
-                        watchersCount = watchersCount,
-                        forksCount = forksCount,
-                        openIssuesCount = openIssuesCount,
-                    ),
-                )
-            }
-
-            lastSearchDate = Date()
-
-            return@async items.toList()
-        }.await()
+        viewModelScope.launch(Dispatchers.IO) {
+            val resultItems = RepositoryProperty.createFromJson(
+                searchApi.searchQuery(inputText)
+            )
+            searchResultSource.postValue(resultItems)
+        }
     }
 }
