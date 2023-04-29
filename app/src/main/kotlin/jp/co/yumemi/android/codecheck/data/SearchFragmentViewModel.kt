@@ -7,17 +7,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.yumemi.android.codecheck.TopActivity.Companion.lastSearchDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Date
+import javax.inject.Inject
 
 /**
- * TwoFragment で使う
+ * 検索用画面のビューモデル
  */
-class SearchFragmentViewModel : ViewModel() {
-    // TODO: DIコンテナの導入時に注入させる
-    private val searchApi: GithubApiRepository = GithubApiRepository()
+@HiltViewModel
+class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubApiRepository) : ViewModel() {
 
     /**
      * 検索結果の実際の格納先

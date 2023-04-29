@@ -13,6 +13,7 @@
         android:theme="@style/Theme.AndroidEngineerCodeCheck"
         android:fullBackupContent="@xml/backup_descriptor"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:name=".MainApplication"
         tools:targetApi="s">
         <activity
             android:name="jp.co.yumemi.android.codecheck.TopActivity"

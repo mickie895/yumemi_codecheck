@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -92,5 +93,14 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
+    // linter
     ktlint 'com.pinterest:ktlint:0.49.0'
+    // DIコンテナ関連
+    implementation "com.google.dagger:hilt-android:2.45"
+    kapt 'com.google.dagger:hilt-compiler:2.45'
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes true
 }
