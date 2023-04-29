@@ -1,4 +1,4 @@
-package jp.co.yumemi.android.code_check.fragments.search
+package jp.co.yumemi.android.codecheck.fragments.search
 
 import android.os.Bundle
 import android.view.View
@@ -7,10 +7,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import jp.co.yumemi.android.code_check.R
-import jp.co.yumemi.android.code_check.data.OneViewModel
-import jp.co.yumemi.android.code_check.data.item
-import jp.co.yumemi.android.code_check.databinding.FragmentOneBinding
+import jp.co.yumemi.android.codecheck.R
+import jp.co.yumemi.android.codecheck.data.OneViewModel
+import jp.co.yumemi.android.codecheck.data.Item
+import jp.co.yumemi.android.codecheck.databinding.FragmentOneBinding
 
 class OneFragment : Fragment(R.layout.fragment_one) {
 
@@ -25,7 +25,7 @@ class OneFragment : Fragment(R.layout.fragment_one) {
         val _dividerItemDecoration =
             DividerItemDecoration(context!!, _layoutManager.orientation)
         val _adapter = CustomAdapter(object : CustomAdapter.OnItemClickListener {
-            override fun itemClick(item: item) {
+            override fun itemClick(item: Item) {
                 gotoRepositoryFragment(item)
             }
         })
@@ -50,7 +50,7 @@ class OneFragment : Fragment(R.layout.fragment_one) {
         }
     }
 
-    fun gotoRepositoryFragment(item: item) {
+    fun gotoRepositoryFragment(item: Item) {
         val _action = OneFragmentDirections
             .actionRepositoriesFragmentToRepositoryFragment(item = item)
         findNavController().navigate(_action)

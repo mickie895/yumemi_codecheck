@@ -1,10 +1,10 @@
-package jp.co.yumemi.android.code_check.data
+package jp.co.yumemi.android.codecheck.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class item(
+data class Item(
     val name: String,
     val ownerIconUrl: String,
     val language: String,

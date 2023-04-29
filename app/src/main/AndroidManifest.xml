@@ -15,7 +15,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         tools:targetApi="s">
         <activity
-            android:name="jp.co.yumemi.android.code_check.TopActivity"
+            android:name="jp.co.yumemi.android.codecheck.TopActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

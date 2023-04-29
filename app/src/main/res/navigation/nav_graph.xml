@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/oneFragment"
-        android:name="jp.co.yumemi.android.code_check.fragments.search.OneFragment"
+        android:name="jp.co.yumemi.android.codecheck.fragments.search.OneFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_one">
         <action
@@ -17,12 +17,12 @@
 
     <fragment
         android:id="@+id/twoFragment"
-        android:name="jp.co.yumemi.android.code_check.fragments.show.TwoFragment"
+        android:name="jp.co.yumemi.android.codecheck.fragments.show.TwoFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_two">
         <argument
             android:name="item"
-            app:argType="jp.co.yumemi.android.code_check.data.item" />
+            app:argType="jp.co.yumemi.android.codecheck.data.Item" />
     </fragment>
 
 </navigation>

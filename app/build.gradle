@@ -35,7 +35,7 @@ android {
     buildFeatures {
         viewBinding true
     }
-    namespace 'jp.co.yumemi.android.code_check'
+    namespace 'jp.co.yumemi.android.codecheck'
 
     lint{
         // If set to true, turns off analysis progress reporting by lint.
