@@ -11,26 +11,26 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import jp.co.yumemi.android.codecheck.R
-import jp.co.yumemi.android.codecheck.data.Item
+import jp.co.yumemi.android.codecheck.data.RepositoryProperty
 
-val diff_util = object : DiffUtil.ItemCallback<Item>() {
-    override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+val diff_util = object : DiffUtil.ItemCallback<RepositoryProperty>() {
+    override fun areItemsTheSame(oldItem: RepositoryProperty, newItem: RepositoryProperty): Boolean {
         return oldItem.name == newItem.name
     }
 
-    override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+    override fun areContentsTheSame(oldItem: RepositoryProperty, newItem: RepositoryProperty): Boolean {
         return oldItem == newItem
     }
 }
 
-class CustomAdapter(
+class SearchResultAdapter(
     private val itemClickListener: OnItemClickListener,
-) : ListAdapter<Item, CustomAdapter.ViewHolder>(diff_util) {
+) : ListAdapter<RepositoryProperty, SearchResultAdapter.ViewHolder>(diff_util) {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     interface OnItemClickListener {
-        fun itemClick(item: Item)
+        fun itemClick(item: RepositoryProperty)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

@@ -8,24 +8,24 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.co.yumemi.android.codecheck.R
-import jp.co.yumemi.android.codecheck.data.OneViewModel
-import jp.co.yumemi.android.codecheck.data.Item
-import jp.co.yumemi.android.codecheck.databinding.FragmentOneBinding
+import jp.co.yumemi.android.codecheck.data.SearchFragmentViewModel
+import jp.co.yumemi.android.codecheck.data.RepositoryProperty
+import jp.co.yumemi.android.codecheck.databinding.FragmentSearchBinding
 
-class OneFragment : Fragment(R.layout.fragment_one) {
+class SearchFragment : Fragment(R.layout.fragment_search) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val _binding = FragmentOneBinding.bind(view)
+        val _binding = FragmentSearchBinding.bind(view)
 
-        val _viewModel = OneViewModel(context!!)
+        val _viewModel = SearchFragmentViewModel(context!!)
 
         val _layoutManager = LinearLayoutManager(context!!)
         val _dividerItemDecoration =
             DividerItemDecoration(context!!, _layoutManager.orientation)
-        val _adapter = CustomAdapter(object : CustomAdapter.OnItemClickListener {
-            override fun itemClick(item: Item) {
+        val _adapter = SearchResultAdapter(object : SearchResultAdapter.OnItemClickListener {
+            override fun itemClick(item: RepositoryProperty) {
                 gotoRepositoryFragment(item)
             }
         })
@@ -50,9 +50,9 @@ class OneFragment : Fragment(R.layout.fragment_one) {
         }
     }
 
-    fun gotoRepositoryFragment(item: Item) {
-        val _action = OneFragmentDirections
-            .actionRepositoriesFragmentToRepositoryFragment(item = item)
+    fun gotoRepositoryFragment(item: RepositoryProperty) {
+        val _action = SearchFragmentDirections
+            .actionRepositoriesFragmentToRepositoryFragment(item)
         findNavController().navigate(_action)
     }
 }

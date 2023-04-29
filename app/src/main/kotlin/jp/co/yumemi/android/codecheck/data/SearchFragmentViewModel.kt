@@ -21,12 +21,12 @@ import java.util.*
 /**
  * TwoFragment で使う
  */
-class OneViewModel(
+class SearchFragmentViewModel(
     val context: Context,
 ) : ViewModel() {
 
     // 検索結果
-    fun searchResults(inputText: String): List<Item> = runBlocking {
+    fun searchResults(inputText: String): List<RepositoryProperty> = runBlocking {
         val client = HttpClient(Android)
 
         return@runBlocking GlobalScope.async {
@@ -39,7 +39,7 @@ class OneViewModel(
 
             val jsonItems = jsonBody.optJSONArray("items")!!
 
-            val items = mutableListOf<Item>()
+            val items = mutableListOf<RepositoryProperty>()
 
             /**
              * アイテムの個数分ループする
@@ -55,7 +55,7 @@ class OneViewModel(
                 val openIssuesCount = jsonItem.optLong("open_issues_count")
 
                 items.add(
-                    Item(
+                    RepositoryProperty(
                         name = name,
                         ownerIconUrl = ownerIconUrl,
                         language = context.getString(R.string.written_language, language),

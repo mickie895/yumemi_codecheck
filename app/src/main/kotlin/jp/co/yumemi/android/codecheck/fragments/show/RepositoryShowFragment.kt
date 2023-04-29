@@ -11,13 +11,13 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import jp.co.yumemi.android.codecheck.R
 import jp.co.yumemi.android.codecheck.TopActivity.Companion.lastSearchDate
-import jp.co.yumemi.android.codecheck.databinding.FragmentTwoBinding
+import jp.co.yumemi.android.codecheck.databinding.FragmentRepositoryShowBinding
 
-class TwoFragment : Fragment(R.layout.fragment_two) {
+class RepositoryShowFragment : Fragment(R.layout.fragment_repository_show) {
 
-    private val args: TwoFragmentArgs by navArgs()
+    private val args: RepositoryShowFragmentArgs by navArgs()
 
-    private var binding: FragmentTwoBinding? = null
+    private var binding: FragmentRepositoryShowBinding? = null
     private val _binding get() = binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -25,9 +25,9 @@ class TwoFragment : Fragment(R.layout.fragment_two) {
 
         Log.d("検索した日時", lastSearchDate.toString())
 
-        binding = FragmentTwoBinding.bind(view)
+        binding = FragmentRepositoryShowBinding.bind(view)
 
-        var item = args.item
+        var item = args.repository
 
         _binding.ownerIconView.load(item.ownerIconUrl)
         _binding.nameView.text = item.name
