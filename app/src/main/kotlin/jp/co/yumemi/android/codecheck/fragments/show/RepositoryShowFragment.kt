@@ -29,12 +29,12 @@ class RepositoryShowFragment : Fragment(R.layout.fragment_repository_show) {
 
         var item = args.repository
 
-        _binding.ownerIconView.load(item.ownerIconUrl)
-        _binding.nameView.text = item.name
-        _binding.languageView.text = item.language
-        _binding.starsView.text = "${item.stargazersCount} stars"
-        _binding.watchersView.text = "${item.watchersCount} watchers"
-        _binding.forksView.text = "${item.forksCount} forks"
-        _binding.openIssuesView.text = "${item.openIssuesCount} open issues"
+        _binding.ownerIcon.load(item.ownerIconUrl)
+        _binding.repositoryName.text = item.name
+        _binding.languageDescription.text = item.language
+        _binding.stars.text = "${item.stargazersCount} stars"
+        _binding.watchers.text = "${item.watchersCount} watchers"
+        _binding.forks.text = "${item.forksCount} forks"
+        _binding.issues.text = "${item.openIssuesCount} open issues"
     }
 }

@@ -12,7 +12,6 @@
         android:layout_margin="16dp"
         android:contentDescription="@null"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_max="240dp"
@@ -22,29 +21,23 @@
         android:id="@+id/repositoryName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_margin="16dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ownerIcon"
+        app:layout_constraintStart_toEndOf="@+id/ownerIcon"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="（リポジトリタイトル）" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/centerGuide"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
 
     <TextView
         android:id="@+id/languageDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
+        android:textAlignment="textEnd"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toStartOf="@+id/centerGuide"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ownerIcon"
         app:layout_constraintTop_toBottomOf="@id/repositoryName"
         tools:text="Written in Kotlin" />
 
@@ -57,8 +50,8 @@
         android:textAlignment="textEnd"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/centerGuide"
-        app:layout_constraintTop_toBottomOf="@id/repositoryName"
+        app:layout_constraintStart_toEndOf="@+id/ownerIcon"
+        app:layout_constraintTop_toBottomOf="@+id/languageDescription"
         tools:text="38530 stars" />
 
     <TextView
@@ -67,12 +60,12 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        tools:text="38530 watchers"
         android:textAlignment="textEnd"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/centerGuide"
-        app:layout_constraintTop_toBottomOf="@id/stars" />
+        app:layout_constraintStart_toEndOf="@+id/ownerIcon"
+        app:layout_constraintTop_toBottomOf="@id/stars"
+        tools:text="38530 watchers" />
 
     <TextView
         android:id="@+id/forks"
@@ -83,7 +76,7 @@
         android:textAlignment="textEnd"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/centerGuide"
+        app:layout_constraintStart_toEndOf="@+id/ownerIcon"
         app:layout_constraintTop_toBottomOf="@id/watchers"
         tools:text="4675 forks" />
 
@@ -93,11 +86,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        tools:text="131 open issues"
         android:textAlignment="textEnd"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/centerGuide"
-        app:layout_constraintTop_toBottomOf="@id/forks" />
+        app:layout_constraintStart_toEndOf="@+id/ownerIcon"
+        app:layout_constraintTop_toBottomOf="@id/forks"
+        tools:text="131 open issues" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

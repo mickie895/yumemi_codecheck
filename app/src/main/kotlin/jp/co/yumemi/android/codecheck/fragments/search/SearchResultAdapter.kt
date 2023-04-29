@@ -41,7 +41,7 @@ class SearchResultAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val _item = getItem(position)
-        (holder.itemView.findViewById<View>(R.id.repositoryNameView) as TextView).text =
+        (holder.itemView.findViewById<View>(R.id.itemName) as TextView).text =
             _item.name
 
         holder.itemView.setOnClickListener {
