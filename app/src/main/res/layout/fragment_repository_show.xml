@@ -6,103 +6,98 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/ownerIconView"
+        android:id="@+id/ownerIcon"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
         android:contentDescription="@null"
-        android:src="@drawable/jetbrains"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="240dp" />
+        app:layout_constraintWidth_max="240dp"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/nameView"
+        android:id="@+id/repositoryName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="JetBrains/kotlin"
-        android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ownerIconView" />
+        app:layout_constraintTop_toBottomOf="@id/ownerIcon"
+        tools:text="（リポジトリタイトル）" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/centerGuid"
+        android:id="@+id/centerGuide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
     <TextView
-        android:id="@+id/languageView"
+        android:id="@+id/languageDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:text="Written in Kotlin"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/nameView"
-        tools:ignore="MissingConstraints" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toStartOf="@+id/centerGuide"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/repositoryName"
+        tools:text="Written in Kotlin" />
 
     <TextView
-        android:id="@+id/starsView"
+        android:id="@+id/stars"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:text="38530 stars"
         android:textAlignment="textEnd"
-        android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/centerGuid"
-        app:layout_constraintTop_toBottomOf="@id/nameView" />
+        app:layout_constraintStart_toStartOf="@id/centerGuide"
+        app:layout_constraintTop_toBottomOf="@id/repositoryName"
+        tools:text="38530 stars" />
 
     <TextView
-        android:id="@+id/watchersView"
+        android:id="@+id/watchers"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:text="38530 watchers"
+        tools:text="38530 watchers"
         android:textAlignment="textEnd"
-        android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/centerGuid"
-        app:layout_constraintTop_toBottomOf="@id/starsView" />
+        app:layout_constraintStart_toStartOf="@id/centerGuide"
+        app:layout_constraintTop_toBottomOf="@id/stars" />
 
     <TextView
-        android:id="@+id/forksView"
+        android:id="@+id/forks"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:text="4675 forks"
         android:textAlignment="textEnd"
-        android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/centerGuid"
-        app:layout_constraintTop_toBottomOf="@id/watchersView" />
+        app:layout_constraintStart_toStartOf="@+id/centerGuide"
+        app:layout_constraintTop_toBottomOf="@id/watchers"
+        tools:text="4675 forks" />
 
     <TextView
-        android:id="@+id/openIssuesView"
+        android:id="@+id/issues"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:text="131 open issues"
+        tools:text="131 open issues"
         android:textAlignment="textEnd"
-        android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/centerGuid"
-        app:layout_constraintTop_toBottomOf="@id/forksView" />
+        app:layout_constraintStart_toStartOf="@id/centerGuide"
+        app:layout_constraintTop_toBottomOf="@id/forks" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

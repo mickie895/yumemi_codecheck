@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Android Engineer CodeCheck</string>
-    <string name="searchInputText_hint">GitHub のリポジトリを検索できるよー</string>
-    <string name="written_language">Written in %s</string>
+    <string name="written_language" translatable="false">Written in %s</string>
+    <string name="searchInputText_hint">Type here to search</string>
+    <string name="no_launguage_detected">No main launguage detected</string>
+    <string name="stars" translatable="false">%d stars</string>
+    <string name="watchers" translatable="false">%d wachers</string>
+    <string name="forks" translatable="false">%d forks</string>
+    <string name="issues" translatable="false">%d open issures</string>
 </resources>

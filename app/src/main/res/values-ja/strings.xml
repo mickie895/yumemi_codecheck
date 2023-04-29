@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Android Engineer CodeCheck</string>
+    <string name="searchInputText_hint">GitHub のリポジトリを検索できるよー</string>
+    <string name="no_launguage_detected">メイン言語無し</string>
+</resources>
