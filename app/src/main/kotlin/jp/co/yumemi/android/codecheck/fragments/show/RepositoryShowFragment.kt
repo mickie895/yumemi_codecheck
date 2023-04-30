@@ -29,7 +29,7 @@ class RepositoryShowFragment : Fragment(R.layout.fragment_repository_show) {
 
         var item = args.repository
 
-        _binding.ownerIcon.load(item.ownerIconUrl)
+        _binding.ownerIcon.load(item.owner.avatarIconUrl)
         _binding.repositoryName.text = item.name
         _binding.languageDescription.text = item.language
         _binding.stars.text = "${item.stargazersCount} stars"
