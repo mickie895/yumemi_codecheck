@@ -38,10 +38,12 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
         lastSearchDate = Date()
 
         viewModelScope.launch(Dispatchers.IO) {
+            /**
             val resultItems = RepositoryProperty.createFromJson(
                 searchApi.searchQuery(inputText)
             )
             searchResultSource.postValue(resultItems)
+            */
         }
     }
 }
