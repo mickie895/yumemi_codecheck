@@ -34,18 +34,18 @@ class SearchResultAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val _view = LayoutInflater.from(parent.context)
+        val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_item, parent, false)
-        return ViewHolder(_view)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val _item = getItem(position)
+        val repositoryProperty = getItem(position)
         (holder.itemView.findViewById<View>(R.id.itemName) as TextView).text =
-            _item.name
+            repositoryProperty.name
 
         holder.itemView.setOnClickListener {
-            itemClickListener.itemClick(_item)
+            itemClickListener.itemClick(repositoryProperty)
         }
     }
 }
