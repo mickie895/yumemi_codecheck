@@ -5,14 +5,25 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import jp.co.yumemi.android.codecheck.data.GithubApiRepository
+import jp.co.yumemi.android.codecheck.data.restapi.GithubApiService
+import jp.co.yumemi.android.codecheck.data.restapi.createRetrofit
 import javax.inject.Singleton
+
+// GithubAPIを利用するために必要なモジュールの準備を行うクラス
 
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
+
     @Singleton
     @Provides
-    fun provideGithubApi(): GithubApiRepository{
+    fun provideGithubApiRepository(): GithubApiRepository{
         return GithubApiRepository()
+    }
+
+    @Provides
+    @Singleton
+    fun provideApiService(): GithubApiService {
+        return createRetrofit().create(GithubApiService::class.java)
     }
 }
