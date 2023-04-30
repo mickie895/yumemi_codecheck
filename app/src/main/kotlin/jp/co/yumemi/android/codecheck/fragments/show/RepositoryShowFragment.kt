@@ -4,37 +4,60 @@
 package jp.co.yumemi.android.codecheck.fragments.show
 
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import coil.load
 import jp.co.yumemi.android.codecheck.R
-import jp.co.yumemi.android.codecheck.TopActivity.Companion.lastSearchDate
+import jp.co.yumemi.android.codecheck.data.RepositoryProperty
 import jp.co.yumemi.android.codecheck.databinding.FragmentRepositoryShowBinding
 
+/**
+ * リポジトリの表示画面
+ */
 class RepositoryShowFragment : Fragment(R.layout.fragment_repository_show) {
 
+    // 他画面から提供される、リポジトリ表示用の引数
     private val args: RepositoryShowFragmentArgs by navArgs()
 
-    private var binding: FragmentRepositoryShowBinding? = null
-    private val _binding get() = binding!!
+    private var bindingSource: FragmentRepositoryShowBinding? = null
+    private val binding get() = bindingSource!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        bindingSource = FragmentRepositoryShowBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("検索した日時", lastSearchDate.toString())
+        setRepositoryStatus(args.repository)
+    }
 
-        binding = FragmentRepositoryShowBinding.bind(view)
+    private fun setRepositoryStatus(property: RepositoryProperty) {
+        binding.ownerIcon.load(property.owner.avatarIconUrl)
+        binding.repositoryName.text = property.name
 
-        var item = args.repository
+        binding.languageDescription.text =
+            when (property.language) {
+                null -> getString(R.string.no_language_detected)
+                else -> getString(R.string.written_language, property.language)
+            }
 
-        _binding.ownerIcon.load(item.owner.avatarIconUrl)
-        _binding.repositoryName.text = item.name
-        _binding.languageDescription.text = item.language
-        _binding.stars.text = "${item.stargazersCount} stars"
-        _binding.watchers.text = "${item.watchersCount} watchers"
-        _binding.forks.text = "${item.forksCount} forks"
-        _binding.issues.text = "${item.openIssuesCount} open issues"
+        binding.stars.text = resources.getQuantityText(R.plurals.stars, property.stargazersCount)
+        binding.watchers.text = resources.getQuantityText(R.plurals.watchers, property.watchersCount)
+        binding.forks.text = resources.getQuantityText(R.plurals.forks, property.forksCount)
+        binding.issues.text = resources.getQuantityText(R.plurals.issues, property.openIssuesCount)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingSource = null
     }
 }

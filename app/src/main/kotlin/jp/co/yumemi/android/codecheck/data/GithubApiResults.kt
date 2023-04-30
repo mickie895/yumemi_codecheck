@@ -33,13 +33,13 @@ data class RepositoryProperty(
     @Json(name = "language")
     val language: String?,
     @Json(name = "stargazers_count")
-    val stargazersCount: Long,
+    val stargazersCount: Int,
     @Json(name = "watchers_count")
-    val watchersCount: Long,
+    val watchersCount: Int,
     @Json(name = "forks_count")
-    val forksCount: Long,
+    val forksCount: Int,
     @Json(name = "open_issues_count")
-    val openIssuesCount: Long,
+    val openIssuesCount: Int,
 ) : Parcelable
 
 /**
