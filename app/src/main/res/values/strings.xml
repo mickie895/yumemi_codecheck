@@ -3,4 +3,7 @@
     <string name="written_language" translatable="false">Written in %s</string>
     <string name="searchInputText_hint">Type here to search</string>
     <string name="no_language_detected">No main language detected</string>
+    <string name="error_by_query">Search failed. Check inputted string.</string>
+    <string name="error_by_network">Search failed. Check network condition.</string>
+    <string name="error_by_unknwoun_reason">Search failed. Please contact to developer.</string>
 </resources>

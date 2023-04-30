@@ -10,7 +10,11 @@ class GithubApiRepository @Inject constructor(private val apiService: GithubApiS
     /**
      * 与えられた文字列をもとに検索を行う
      */
-    suspend fun searchQuery(query: String): RepositorySearchResult {
-        return apiService.search(query)
+    suspend fun searchQuery(query: String): SearchApiResult {
+        return try {
+            SearchApiResult.Ok(apiService.search(query))
+        } catch (e: Exception) {
+            SearchApiResult.Error.ByUnknownSource(e)
+        }
     }
 }
