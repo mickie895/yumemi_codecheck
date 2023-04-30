@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 YUMEMI Inc. All rights reserved.
  */
-package jp.co.yumemi.android.codecheck.data
+package jp.co.yumemi.android.codecheck.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.yumemi.android.codecheck.TopActivity.Companion.lastSearchDate
+import jp.co.yumemi.android.codecheck.data.GithubApiRepository
+import jp.co.yumemi.android.codecheck.data.RepositoryProperty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -23,12 +25,12 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
     /**
      * 検索結果の実際の格納先
      */
-    private val searchResultSource: MutableLiveData<List<RepositoryProperty>> = MutableLiveData()
+    private val repositoryListSource: MutableLiveData<List<RepositoryProperty>> = MutableLiveData()
 
     /**
      * UIで利用する検索結果の一覧のLiveData
      */
-    val searchResult: LiveData<List<RepositoryProperty>> = searchResultSource
+    val searchedRepositoryList: LiveData<List<RepositoryProperty>> = repositoryListSource
 
     /**
      * リポジトリの検索をRepository層に依頼する
@@ -38,12 +40,8 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
         lastSearchDate = Date()
 
         viewModelScope.launch(Dispatchers.IO) {
-            /**
-            val resultItems = RepositoryProperty.createFromJson(
-                searchApi.searchQuery(inputText)
-            )
-            searchResultSource.postValue(resultItems)
-            */
+            val searchApiResult = searchApi.searchQuery(inputText)
+            repositoryListSource.postValue(searchApiResult.searchedItemList)
         }
     }
 }

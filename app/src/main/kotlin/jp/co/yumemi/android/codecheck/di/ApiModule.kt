@@ -4,7 +4,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jp.co.yumemi.android.codecheck.data.GithubApiRepository
 import jp.co.yumemi.android.codecheck.data.restapi.GithubApiService
 import jp.co.yumemi.android.codecheck.data.restapi.createRetrofit
 import javax.inject.Singleton
@@ -14,12 +13,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
-
-    @Singleton
-    @Provides
-    fun provideGithubApiRepository(): GithubApiRepository{
-        return GithubApiRepository()
-    }
 
     @Provides
     @Singleton

@@ -44,7 +44,7 @@ class MoshiParseTest {
     }
 
     @Test
-    fun parseErrorTest(){
+    fun parseErrorTest() {
         Assert.assertThrows("不正な配列が入っていたときの動作確認", JsonDataException::class.java) {
             jsonAdapter.fromJson(sampleErrorResult)
         }

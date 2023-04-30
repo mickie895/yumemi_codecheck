@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.codecheck.R
-import jp.co.yumemi.android.codecheck.data.SearchFragmentViewModel
 import jp.co.yumemi.android.codecheck.data.RepositoryProperty
+import jp.co.yumemi.android.codecheck.viewmodels.SearchFragmentViewModel
 import jp.co.yumemi.android.codecheck.databinding.FragmentSearchBinding
 
 @AndroidEntryPoint
@@ -28,7 +28,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         binding = FragmentSearchBinding.bind(view)
 
-        viewModel.searchResult.observe(viewLifecycleOwner, searchResultObserver)
+        viewModel.searchedRepositoryList.observe(viewLifecycleOwner, searchResultObserver)
 
         val _layoutManager = LinearLayoutManager(requireContext())
         val _dividerItemDecoration =
