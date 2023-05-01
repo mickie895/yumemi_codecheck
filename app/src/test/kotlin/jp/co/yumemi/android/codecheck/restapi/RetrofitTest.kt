@@ -4,15 +4,16 @@ import jp.co.yumemi.android.codecheck.data.restapi.GithubApiService
 import jp.co.yumemi.android.codecheck.data.restapi.createRetrofit
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 
 class RetrofitTest {
     /**
      * Retrofitの動作確認用テスト
      */
+    @Ignore("Githubへの不要な負荷を避けるため、モックを利用したテストへ切り替えた")
     @Test
     fun retrofitUseTest() = runTest {
-        // TODO:動作確認が完了したらモックに差し替える
         val service = createRetrofit().create(GithubApiService::class.java)
         val searchResult = service.search("git", 1, 30)
 
