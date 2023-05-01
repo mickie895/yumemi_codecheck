@@ -32,3 +32,16 @@ sealed class SearchApiResult {
         class ByUnknownSource(causedBy: Exception) : Error(causedBy)
     }
 }
+
+/**
+ * エラー原因の振り分けを行う
+ */
+fun createFailedInstanceFrom(causedBy: Exception): SearchApiResult.Error {
+    // ※実際に動かして見た結果なので見落としを発見したら都度追加すること
+    return when (causedBy) {
+        is retrofit2.HttpException -> SearchApiResult.Error.ByQuery(causedBy) // 検索失敗もここに含まれる
+        is com.squareup.moshi.JsonDataException -> SearchApiResult.Error.ByQuery(causedBy) // APIの戻り値がエラーだったらこのエラーが帰ってくる
+        is java.io.IOException -> SearchApiResult.Error.ByNetwork(causedBy) // 機内モード時の例外はそれはここに含まれた
+        else -> SearchApiResult.Error.ByUnknownSource(causedBy) // 想定外の例外
+    }
+}
