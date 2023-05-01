@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.yumemi.android.codecheck.data.GithubApiRepository
 import jp.co.yumemi.android.codecheck.data.RepositoryProperty
 import jp.co.yumemi.android.codecheck.data.SearchApiResult
+import jp.co.yumemi.android.codecheck.fragments.testutils.SearchFragmentIdlingResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,7 +21,7 @@ import javax.inject.Inject
  * 検索用画面のビューモデル
  */
 @HiltViewModel
-class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubApiRepository) : ViewModel() {
+class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubApiRepository, val idlingResource: SearchFragmentIdlingResource) : ViewModel() {
 
     /**
      * 検索結果の実際の格納先
@@ -64,6 +65,8 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
                 is SearchApiResult.Ok ->
                     repositoryListSource.postValue(searchApiResult.result.searchedItemList)
             }
+        }.invokeOnCompletion {
+            idlingResource.decrement()
         }
     }
 }

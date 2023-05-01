@@ -17,7 +17,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "jp.co.yumemi.android.codecheck.di.CustomTestRunner"
     }
 
     buildTypes {
@@ -88,17 +88,23 @@ dependencies {
     implementation 'io.ktor:ktor-client-android:2.3.0'
 
     implementation 'io.coil-kt:coil:2.3.0'
+    implementation 'androidx.test.espresso:espresso-idling-resource:3.6.0-alpha01'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0-RC'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    debugImplementation 'androidx.fragment:fragment-testing:1.6.0-beta01'
 
     // linter
     ktlint 'com.pinterest:ktlint:0.49.0'
     // DIコンテナ関連
-    implementation "com.google.dagger:hilt-android:2.45"
-    kapt 'com.google.dagger:hilt-compiler:2.45'
+    implementation "com.google.dagger:hilt-android:2.46"
+    kapt 'com.google.dagger:hilt-compiler:2.46'
+    testImplementation 'com.google.dagger:hilt-android-testing:2.46'
+    kaptTest 'com.google.dagger:hilt-android-compiler:2.46'
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.46'
+    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.46'
 
     // RESTクライアント
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

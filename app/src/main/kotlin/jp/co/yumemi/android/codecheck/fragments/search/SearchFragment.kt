@@ -59,6 +59,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             .setOnEditorActionListener { editText, action, _ ->
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
                     editText.text.toString().let {
+                        viewModel.idlingResource.increment()
                         viewModel.searchRepository(it)
                     }
                     return@setOnEditorActionListener true
