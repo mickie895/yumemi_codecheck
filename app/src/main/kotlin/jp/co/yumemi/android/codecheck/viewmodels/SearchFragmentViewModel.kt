@@ -65,8 +65,6 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
                 is SearchApiResult.Ok ->
                     repositoryListSource.postValue(searchApiResult.result.searchedItemList)
             }
-        }.invokeOnCompletion {
-            idlingResource.decrement()
         }
     }
 }

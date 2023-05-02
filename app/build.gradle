@@ -94,6 +94,8 @@ dependencies {
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0-RC'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test:core-ktx:1.5.0'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
     debugImplementation 'androidx.fragment:fragment-testing:1.6.0-beta01'
 
     // linter

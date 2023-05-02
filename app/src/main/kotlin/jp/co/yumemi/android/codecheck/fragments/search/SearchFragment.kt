@@ -83,6 +83,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
      */
     private val searchResultObserver: Observer<List<RepositoryProperty>> = Observer {
         adapter.submitList(it)
+        viewModel.idlingResource.decrement()
     }
 
     /**
@@ -104,5 +105,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT).show()
         Log.i("SearchFragment", "Error \"${error.causedBy}\" happened ")
         viewModel.errorMessageRecieved()
+        viewModel.idlingResource.decrement()
     }
 }
