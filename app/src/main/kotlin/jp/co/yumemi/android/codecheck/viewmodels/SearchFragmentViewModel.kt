@@ -11,7 +11,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.yumemi.android.codecheck.data.GithubApiRepository
 import jp.co.yumemi.android.codecheck.data.RepositoryProperty
-import jp.co.yumemi.android.codecheck.data.SearchApiResult
+import jp.co.yumemi.android.codecheck.data.SearchApiResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -37,14 +37,14 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
     /**
      * 最後に発生したエラーの格納先
      */
-    private val lastErrorSource: MutableLiveData<SearchApiResult.Error?> = MutableLiveData(null)
+    private val lastErrorSource: MutableLiveData<SearchApiResponse.Error?> = MutableLiveData(null)
 
     /**
      * UIで利用する、エラーメッセージ受け渡し用のLiveData
      *
      * ※利用先が一つしかないことが保証できるため成り立っている。
      */
-    val lastError: LiveData<SearchApiResult.Error?> = lastErrorSource
+    val lastError: LiveData<SearchApiResponse.Error?> = lastErrorSource
 
     /**
      * エラーのUI反映が完了したことの通知
@@ -61,9 +61,9 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
     fun searchRepository(inputText: String): Job =
         viewModelScope.launch(Dispatchers.IO) {
             when (val searchApiResult = searchApi.searchQuery(inputText)) {
-                is SearchApiResult.Error ->
+                is SearchApiResponse.Error ->
                     lastErrorSource.postValue(searchApiResult)
-                is SearchApiResult.Ok ->
+                is SearchApiResponse.Ok ->
                     repositoryListSource.postValue(searchApiResult.result.searchedItemList)
             }
         }

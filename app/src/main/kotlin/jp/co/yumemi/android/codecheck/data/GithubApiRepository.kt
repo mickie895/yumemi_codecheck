@@ -10,9 +10,9 @@ class GithubApiRepository @Inject constructor(private val apiService: GithubApiS
     /**
      * 与えられた文字列をもとにリポジトリの検索を行う
      */
-    suspend fun searchQuery(query: String): SearchApiResult {
+    suspend fun searchQuery(query: String): SearchApiResponse {
         return try {
-            SearchApiResult.Ok(apiService.search(query))
+            SearchApiResponse.Ok(apiService.search(query))
         } catch (e: Exception) {
             createFailedInstanceFrom(e)
         }

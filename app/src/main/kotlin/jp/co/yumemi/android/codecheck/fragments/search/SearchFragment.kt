@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.codecheck.R
 import jp.co.yumemi.android.codecheck.data.RepositoryProperty
-import jp.co.yumemi.android.codecheck.data.SearchApiResult
+import jp.co.yumemi.android.codecheck.data.SearchApiResponse
 import jp.co.yumemi.android.codecheck.databinding.FragmentSearchBinding
 import jp.co.yumemi.android.codecheck.viewmodels.SearchFragmentViewModel
 
@@ -83,7 +83,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     /**
      * 検索画面何らかの原因によって失敗したときの処理
      */
-    private val searchErrorObserver: Observer<SearchApiResult.Error?> = Observer {
+    private val searchErrorObserver: Observer<SearchApiResponse.Error?> = Observer {
         // nullになったことを受け取った場合は何もしない
         val error = when (it) {
             null -> return@Observer
@@ -91,9 +91,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
 
         val toastText = when (error) {
-            is SearchApiResult.Error.ByNetwork -> R.string.error_by_network
-            is SearchApiResult.Error.ByQuery -> R.string.error_by_query
-            is SearchApiResult.Error.ByUnknownSource -> R.string.error_by_unknwoun_reason
+            is SearchApiResponse.Error.ByNetwork -> R.string.error_by_network
+            is SearchApiResponse.Error.ByQuery -> R.string.error_by_query
+            is SearchApiResponse.Error.ByUnknownSource -> R.string.error_by_unknwoun_reason
         }
 
         Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT).show()
