@@ -59,12 +59,29 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
      * リポジトリの検索をRepository層に依頼する
      */
     fun searchRepository(inputText: String): Job =
+        searchStrategy { searchApi.searchQuery(inputText) }
+
+    /**
+     * 次のページのデータの取得をRepository層に依頼する
+     */
+    fun nextPage(): Job =
+        searchStrategy { searchApi.nextPage() }
+
+    val canSearchNextPage: Boolean
+        get() {
+            return searchApi.canSearchNextPage
+        }
+
+    /**
+     * 検索APIを起動するときの共通処理
+     */
+    private fun searchStrategy(strategy: suspend () -> SearchApiResponse): Job =
         viewModelScope.launch(Dispatchers.IO) {
-            when (val searchApiResult = searchApi.searchQuery(inputText)) {
+            when (val searchApiResult = strategy()) {
                 is SearchApiResponse.Error ->
                     lastErrorSource.postValue(searchApiResult)
                 is SearchApiResponse.Ok ->
-                    repositoryListSource.postValue(searchApiResult.result.searchedItemList)
+                    repositoryListSource.postValue(searchApiResult.result)
             }
         }
 }
