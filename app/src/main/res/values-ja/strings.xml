@@ -3,4 +3,7 @@
     <string name="app_name">Android Engineer CodeCheck</string>
     <string name="searchInputText_hint">GitHub のリポジトリを検索できるよー</string>
     <string name="no_language_detected">メイン言語無し</string>
+    <string name="error_by_query">検索に失敗しました。入力を確認してください。</string>
+    <string name="error_by_network">検索に失敗しました。ネットワークの状態を確認してください。</string>
+    <string name="error_by_unknwoun_reason">何らかの理由で検索に失敗しました。開発者に連絡してください。</string>
 </resources>
