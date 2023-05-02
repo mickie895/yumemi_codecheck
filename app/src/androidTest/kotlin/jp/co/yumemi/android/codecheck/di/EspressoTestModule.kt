@@ -8,6 +8,10 @@ import jp.co.yumemi.android.codecheck.espresso.SearchIdlingResource
 import jp.co.yumemi.android.codecheck.fragments.testutils.SearchFragmentIdlingResource
 import javax.inject.Singleton
 
+/**
+ * Espressoによる非同期処理の待機を行うために利用する、
+ * アイドリングリソースの注入用モジュール
+ */
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],

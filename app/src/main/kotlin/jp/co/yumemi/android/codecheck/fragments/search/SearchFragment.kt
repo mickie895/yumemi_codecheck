@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -24,7 +25,8 @@ import jp.co.yumemi.android.codecheck.viewmodels.SearchFragmentViewModel
 @AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
-    private val viewModel: SearchFragmentViewModel by viewModels()
+    @VisibleForTesting
+    val viewModel: SearchFragmentViewModel by viewModels()
 
     private lateinit var binding: FragmentSearchBinding
     private lateinit var adapter: SearchResultAdapter
