@@ -35,7 +35,7 @@ class AppendableRepositoryList(private var searchResult: RepositorySearchResult)
      * （何らかの負荷で検索が完了していない場合、安全側に倒しておく）
      */
     val canAppendResult: Boolean
-        get() = searchedPage * perPage >= searchResult.totalCount || searchResult.incompleteResults
+        get() = searchedPage * perPage < searchResult.totalCount && !searchResult.incompleteResults
 
     /**
      * 検索結果を現在のデータに追記する
