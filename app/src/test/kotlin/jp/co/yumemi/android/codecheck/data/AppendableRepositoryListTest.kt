@@ -24,7 +24,6 @@ class AppendableRepositoryListTest {
 
     @Test
     fun checkAppendNormal() {
-        // 適当なサイズの結果を準備する
         testTarget = AppendableRepositoryList(getResult(sampleApiResult))
         Assert.assertTrue("適当なサイズの結果", testTarget.canAppendResult)
         Assert.assertEquals("次のページの確認", 2, testTarget.nextPage)
@@ -44,5 +43,11 @@ class AppendableRepositoryListTest {
 
         testTarget.appendResult(getResult(sampleWith(incompleteResults = true)))
         Assert.assertFalse("検索が間に合わなかったときのチェック", testTarget.canAppendResult)
+    }
+
+    @Test
+    fun checkAbnormalState() {
+        testTarget = AppendableRepositoryList(getResult(emptyApiResult))
+        Assert.assertFalse("境界条件チェック：検索結果が空のときは次は検索できない", testTarget.canAppendResult)
     }
 }
