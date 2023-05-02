@@ -48,11 +48,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
         })
 
-        binding.recyclerView.apply {
-            this.layoutManager = layoutManager
-            this.addItemDecoration(dividerItemDecoration)
-            this.adapter = adapter
-        }
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.addItemDecoration(dividerItemDecoration)
+        binding.recyclerView.adapter = adapter
 
         // 検索欄の準備
         binding.searchInputText
