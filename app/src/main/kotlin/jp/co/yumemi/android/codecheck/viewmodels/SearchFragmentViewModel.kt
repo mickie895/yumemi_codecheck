@@ -57,6 +57,11 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
     val searching: LiveData<Boolean> = searchingSource
 
     /**
+     * 検索してよいかどうかのチェック
+     */
+    val canUseSearchApi: Boolean get() = searching.value == false
+
+    /**
      * エラーのUI反映が完了したことの通知
      * これを忘れると画面回転時などに複数回表示が出る
      */

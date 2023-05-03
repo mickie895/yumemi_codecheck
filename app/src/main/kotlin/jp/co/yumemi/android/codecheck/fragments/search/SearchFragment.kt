@@ -35,8 +35,10 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
 
         binding = FragmentSearchBinding.bind(view)
 
+        // 値変化時の見た目の追従
         viewModel.searchedRepositoryList.observe(viewLifecycleOwner, searchResultObserver)
         viewModel.lastError.observe(viewLifecycleOwner, searchErrorObserver)
+        viewModel.searching.observe(viewLifecycleOwner, searchProgressObserver)
 
         // recyclerviewの準備
         val layoutManager = LinearLayoutManager(requireContext())
@@ -54,7 +56,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
             .setOnEditorActionListener { editText, action, _ ->
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
                     editText.text.toString().let {
-                        if (viewModel.searching.value == false) {
+                        if (viewModel.canUseSearchApi) {
                             viewModel.startSearchFromUI()
                             viewModel.searchRepository(it)
                         }
@@ -89,8 +91,18 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
         }
 
         Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT).show()
-        Log.i("SearchFragment", "Error \"${error.causedBy}\" happened ")
+        Log.i("Repository search error", "Error \"${error.causedBy}\" happened ")
         viewModel.errorMessageRecieved()
+    }
+
+    /**
+     * 検索中かどうかを視覚的にわかりやすくするための書影
+     */
+    private val searchProgressObserver: Observer<Boolean> = Observer {
+        binding.searchProgress.visibility = when (it) {
+            true -> View.VISIBLE
+            false -> View.INVISIBLE
+        }
     }
 
     /**
@@ -101,7 +113,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
             SearchResultItem.EmptyItem -> {} // ※何らかの拍子に選択できてしまったときの事故防止
             is SearchResultItem.Repository -> gotoRepositoryFragment(item.repository)
             SearchResultItem.SearchNextItem -> {
-                if (viewModel.searching.value == false) {
+                if (viewModel.canUseSearchApi) {
                     viewModel.startSearchFromUI()
                     viewModel.nextPage()
                 }
