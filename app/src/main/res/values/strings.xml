@@ -8,4 +8,6 @@
     <string name="error_by_unknwoun_reason">Search failed. Please contact to developer.</string>
     <string name="empty_items">No items here. Search repository with new text.</string>
     <string name="next_page">Click here to search next items.</string>
+    <string name="history">Search History</string>
+    <string name="clear_history">Clear</string>
 </resources>
