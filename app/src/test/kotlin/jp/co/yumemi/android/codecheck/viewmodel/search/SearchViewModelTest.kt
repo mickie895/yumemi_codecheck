@@ -9,6 +9,7 @@ import jp.co.yumemi.android.codecheck.restapi.mock.MockedGithubApiService
 import jp.co.yumemi.android.codecheck.restapi.mock.getMockService
 import jp.co.yumemi.android.codecheck.util.MainCoroutineRule
 import jp.co.yumemi.android.codecheck.viewmodels.SearchFragmentViewModel
+import jp.co.yumemi.android.codecheck.viewmodels.SearchResultItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
@@ -41,18 +42,40 @@ class SearchViewModelTest {
         viewModel = SearchFragmentViewModel(GithubApiRepository(apiService))
     }
 
+    /**
+     * 現時点での格納されている値を取得
+     */
+    private fun takeCurrentList(): List<SearchResultItem> = viewModel.searchedRepositoryList.value!!
+
     @Test
     fun checkRepositoryList() = runTest {
         Assert.assertNull("開始時にエラーは無し", viewModel.lastError.value)
 
         viewModel.searchRepository("git").join()
-        Assert.assertEquals("通常の検索成功時の状況", 3, viewModel.searchedRepositoryList.value?.count())
+        Assert.assertEquals("通常の検索成功時の状況", 4, takeCurrentList().count())
+        Assert.assertEquals(
+            "最後に続き検索用の項目が入っている",
+            SearchResultItem.SearchNextItem,
+            takeCurrentList().last(),
+        )
 
         Assert.assertNull("正常時にエラーは出ない", viewModel.lastError.value)
 
+        viewModel.nextPage().join()
+        Assert.assertEquals("続きを検索したときの挙動", 7, takeCurrentList().count())
+        Assert.assertEquals(
+            "最後に続き検索用の項目が入っている",
+            SearchResultItem.SearchNextItem,
+            takeCurrentList().last(),
+        )
+
         apiService.nextApiResult = sampleErrorResult
         viewModel.searchRepository("git").join()
-        Assert.assertEquals("エラーが発生しているとき、前回の検索結果を保持している", 3, viewModel.searchedRepositoryList.value?.count())
+        Assert.assertEquals(
+            "エラーが発生しているとき、前回の検索結果を保持している",
+            4,
+            takeCurrentList().count(),
+        )
 
         Assert.assertNotNull("エラー時はそれを示すメッセージが格納される", viewModel.lastError.value)
 
@@ -62,6 +85,15 @@ class SearchViewModelTest {
 
         apiService.nextApiResult = emptyApiResult
         viewModel.searchRepository("git").join()
-        Assert.assertEquals("検索結果がなかったときはなかったということがわかる", 0, viewModel.searchedRepositoryList.value?.count())
+        Assert.assertEquals(
+            "検索結果がなかったときはなかったということがわかる",
+            1,
+            takeCurrentList().count(),
+        )
+        Assert.assertEquals(
+            "空であることを示すメッセージが入っている",
+            SearchResultItem.EmptyItem,
+            takeCurrentList().first(),
+        )
     }
 }

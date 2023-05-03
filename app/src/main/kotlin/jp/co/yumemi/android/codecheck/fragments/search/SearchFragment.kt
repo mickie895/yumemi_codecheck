@@ -54,8 +54,10 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
             .setOnEditorActionListener { editText, action, _ ->
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
                     editText.text.toString().let {
-                        // TODO: 連続で選択したり、他の機能と一緒に起動したときの処理
-                        viewModel.searchRepository(it)
+                        if (viewModel.searching.value == false) {
+                            viewModel.startSearchFromUI()
+                            viewModel.searchRepository(it)
+                        }
                     }
                     return@setOnEditorActionListener true
                 }
@@ -97,8 +99,13 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
     override fun itemClick(item: SearchResultItem) {
         when (item) {
             SearchResultItem.EmptyItem -> {} // ※何らかの拍子に選択できてしまったときの事故防止
-            is SearchResultItem.Repository -> gotoRepositoryFragment(item.repository) // TODO: 連続でクリックしたときの対応
-            SearchResultItem.SearchNextItem -> viewModel.nextPage()
+            is SearchResultItem.Repository -> gotoRepositoryFragment(item.repository)
+            SearchResultItem.SearchNextItem -> {
+                if (viewModel.searching.value == false) {
+                    viewModel.startSearchFromUI()
+                    viewModel.nextPage()
+                }
+            }
         }
     }
 

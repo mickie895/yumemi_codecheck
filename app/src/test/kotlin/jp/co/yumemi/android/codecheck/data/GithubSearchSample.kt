@@ -2,13 +2,13 @@ package jp.co.yumemi.android.codecheck.data
 
 // 各種検索結果
 
-fun sampleWith(total: Int = 10000, incompleteResults: Boolean = false): String = String.format(customApiResult, total, incompleteResults)
+fun sampleWith(total: Int = 10000): String = String.format(customApiResult, total)
 
 // 適当なタイミングで「git」で調べたときの検索結果
 const val sampleApiResult = """
         {
   "total_count": 7653556,
-  "incomplete_results": false,
+  "incomplete_results": true,
   "items": [
     {
       "id": 1062897,
@@ -385,7 +385,7 @@ const val emptyApiResult = """
 private const val customApiResult = """
         {
   "total_count": %d,
-  "incomplete_results": %b,
+  "incomplete_results": true,
   "items": [
     {
       "id": 1062897,

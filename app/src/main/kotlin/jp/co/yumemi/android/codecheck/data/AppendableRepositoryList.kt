@@ -35,7 +35,7 @@ class AppendableRepositoryList(private var searchResult: RepositorySearchResult)
      * （何らかの負荷で検索が完了していない場合、安全側に倒しておく）
      */
     val canAppendResult: Boolean
-        get() = searchedPage * perPage < searchResult.totalCount && !searchResult.incompleteResults
+        get() = searchedPage * perPage < searchResult.totalCount
 
     fun isEmpty(): Boolean {
         return repositoryList.isEmpty()
@@ -52,5 +52,5 @@ class AppendableRepositoryList(private var searchResult: RepositorySearchResult)
 }
 
 fun createDefaultResultList(): AppendableRepositoryList {
-    return AppendableRepositoryList(RepositorySearchResult(listOf(), 0, false))
+    return AppendableRepositoryList(RepositorySearchResult(listOf(), 0))
 }

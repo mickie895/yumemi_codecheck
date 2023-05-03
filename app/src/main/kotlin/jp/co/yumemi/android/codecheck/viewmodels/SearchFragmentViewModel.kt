@@ -49,6 +49,13 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
      */
     val lastError: LiveData<SearchApiResponse.Error?> = lastErrorSource
 
+    private val searchingSource: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    /**
+     * 現在検索している状態化どうかの確認
+     */
+    val searching: LiveData<Boolean> = searchingSource
+
     /**
      * エラーのUI反映が完了したことの通知
      * これを忘れると画面回転時などに複数回表示が出る
@@ -71,6 +78,15 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
         searchStrategy { searchApi.nextPage() }
 
     /**
+     * 検索開始を通知する
+     */
+    @MainThread
+    fun startSearchFromUI() {
+        // ※trueへのセットをUIスレッドからのみに絞り、多重タップ等による連続での検索機能の起動を防止する
+        searchingSource.value = true
+    }
+
+    /**
      * 検索APIを起動するときの共通処理
      */
     private fun searchStrategy(strategy: suspend () -> SearchApiResponse): Job =
@@ -81,6 +97,9 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
                 is SearchApiResponse.Ok ->
                     repositoryListSource.postValue(convertApiResponse(searchApiResponse.result))
             }
+
+            // 検索が終了したことを通知させる
+            searchingSource.postValue(false)
         }
 
     /**

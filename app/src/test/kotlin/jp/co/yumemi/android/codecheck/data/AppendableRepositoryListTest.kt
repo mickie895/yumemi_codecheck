@@ -37,15 +37,6 @@ class AppendableRepositoryListTest {
     }
 
     @Test
-    fun checkAppendNormal2() {
-        testTarget = AppendableRepositoryList(getResult(sampleWith(31)))
-        Assert.assertTrue("境界条件チェック1", testTarget.canAppendResult)
-
-        testTarget.appendResult(getResult(sampleWith(incompleteResults = true)))
-        Assert.assertFalse("検索が間に合わなかったときのチェック", testTarget.canAppendResult)
-    }
-
-    @Test
     fun checkAbnormalState() {
         testTarget = AppendableRepositoryList(getResult(emptyApiResult))
         Assert.assertFalse("境界条件チェック：検索結果が空のときは次は検索できない", testTarget.canAppendResult)
