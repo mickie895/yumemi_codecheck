@@ -9,9 +9,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.co.yumemi.android.codecheck.data.AppendableRepositoryList
 import jp.co.yumemi.android.codecheck.data.GithubApiRepository
-import jp.co.yumemi.android.codecheck.data.RepositoryProperty
-import jp.co.yumemi.android.codecheck.data.SearchApiResult
+import jp.co.yumemi.android.codecheck.data.SearchApiResponse
+import jp.co.yumemi.android.codecheck.data.createDefaultResultList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -27,24 +28,38 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
     /**
      * 検索結果の実際の格納先
      */
-    private val repositoryListSource: MutableLiveData<List<RepositoryProperty>> = MutableLiveData()
+    private val repositoryListSource: MutableLiveData<List<SearchResultItem>> = MutableLiveData(
+        convertApiResponse(createDefaultResultList()),
+    )
 
     /**
      * UIで利用する検索結果の一覧のLiveData
      */
-    val searchedRepositoryList: LiveData<List<RepositoryProperty>> = repositoryListSource
+    val searchedRepositoryList: LiveData<List<SearchResultItem>> = repositoryListSource
 
     /**
      * 最後に発生したエラーの格納先
      */
-    private val lastErrorSource: MutableLiveData<SearchApiResult.Error?> = MutableLiveData(null)
+    private val lastErrorSource: MutableLiveData<SearchApiResponse.Error?> = MutableLiveData(null)
 
     /**
      * UIで利用する、エラーメッセージ受け渡し用のLiveData
      *
      * ※利用先が一つしかないことが保証できるため成り立っている。
      */
-    val lastError: LiveData<SearchApiResult.Error?> = lastErrorSource
+    val lastError: LiveData<SearchApiResponse.Error?> = lastErrorSource
+
+    private val searchingSource: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    /**
+     * 現在検索している状態化どうかの確認
+     */
+    val searching: LiveData<Boolean> = searchingSource
+
+    /**
+     * 検索してよいかどうかのチェック
+     */
+    val canUseSearchApi: Boolean get() = searching.value == false
 
     /**
      * エラーのUI反映が完了したことの通知
@@ -59,12 +74,56 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
      * リポジトリの検索をRepository層に依頼する
      */
     fun searchRepository(inputText: String): Job =
+        searchStrategy { searchApi.searchQuery(inputText) }
+
+    /**
+     * 次のページのデータの取得をRepository層に依頼する
+     */
+    fun nextPage(): Job =
+        searchStrategy { searchApi.nextPage() }
+
+    /**
+     * 検索開始を通知する
+     */
+    @MainThread
+    fun startSearchFromUI() {
+        // ※trueへのセットをUIスレッドからのみに絞り、多重タップ等による連続での検索機能の起動を防止する
+        searchingSource.value = true
+    }
+
+    /**
+     * 検索APIを起動するときの共通処理
+     */
+    private fun searchStrategy(strategy: suspend () -> SearchApiResponse): Job =
         viewModelScope.launch(Dispatchers.IO) {
-            when (val searchApiResult = searchApi.searchQuery(inputText)) {
-                is SearchApiResult.Error ->
-                    lastErrorSource.postValue(searchApiResult)
-                is SearchApiResult.Ok ->
-                    repositoryListSource.postValue(searchApiResult.result.searchedItemList)
+            when (val searchApiResponse = strategy()) {
+                is SearchApiResponse.Error ->
+                    lastErrorSource.postValue(searchApiResponse)
+                is SearchApiResponse.Ok ->
+                    repositoryListSource.postValue(convertApiResponse(searchApiResponse.result))
             }
+
+            // 検索が終了したことを通知させる
+            searchingSource.postValue(false)
         }
+
+    /**
+     * Apiからの結果をもとに検索結果欄に表示させるリストを作成する
+     */
+    private fun convertApiResponse(response: AppendableRepositoryList): List<SearchResultItem> {
+        val result: MutableList<SearchResultItem> =
+            response.currentList().map { item -> SearchResultItem.Repository(item) }.toMutableList()
+
+        if (response.canAppendResult) {
+            result.add(SearchResultItem.SearchNextItem)
+            return result
+        }
+
+        if (response.isEmpty()) {
+            result.add(SearchResultItem.EmptyItem)
+            return result
+        }
+
+        return result
+    }
 }

@@ -6,4 +6,6 @@
     <string name="error_by_query">検索に失敗しました。入力を確認してください。</string>
     <string name="error_by_network">検索に失敗しました。ネットワークの状態を確認してください。</string>
     <string name="error_by_unknwoun_reason">何らかの理由で検索に失敗しました。開発者に連絡してください。</string>
+    <string name="empty_items">検索結果はありません。テキストを入力して検索してみてください。</string>
+    <string name="next_page">続きを表示する</string>
 </resources>

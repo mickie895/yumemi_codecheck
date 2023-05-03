@@ -14,15 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.codecheck.R
 import jp.co.yumemi.android.codecheck.data.RepositoryProperty
-import jp.co.yumemi.android.codecheck.data.SearchApiResult
+import jp.co.yumemi.android.codecheck.data.SearchApiResponse
 import jp.co.yumemi.android.codecheck.databinding.FragmentSearchBinding
 import jp.co.yumemi.android.codecheck.viewmodels.SearchFragmentViewModel
+import jp.co.yumemi.android.codecheck.viewmodels.SearchResultItem
 
 /**
  * 検索画面
  */
 @AndroidEntryPoint
-class SearchFragment : Fragment(R.layout.fragment_search) {
+class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.OnItemClickListener {
 
     private val viewModel: SearchFragmentViewModel by viewModels()
 
@@ -34,19 +35,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         binding = FragmentSearchBinding.bind(view)
 
+        // 値変化時の見た目の追従
         viewModel.searchedRepositoryList.observe(viewLifecycleOwner, searchResultObserver)
         viewModel.lastError.observe(viewLifecycleOwner, searchErrorObserver)
+        viewModel.searching.observe(viewLifecycleOwner, searchProgressObserver)
 
         // recyclerviewの準備
         val layoutManager = LinearLayoutManager(requireContext())
         val dividerItemDecoration =
             DividerItemDecoration(requireContext(), layoutManager.orientation)
 
-        adapter = SearchResultAdapter(object : SearchResultAdapter.OnItemClickListener {
-            override fun itemClick(item: RepositoryProperty) {
-                gotoRepositoryFragment(item)
-            }
-        })
+        adapter = SearchResultAdapter(this)
 
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.addItemDecoration(dividerItemDecoration)
@@ -57,7 +56,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             .setOnEditorActionListener { editText, action, _ ->
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
                     editText.text.toString().let {
-                        viewModel.searchRepository(it)
+                        if (viewModel.canUseSearchApi) {
+                            viewModel.startSearchFromUI()
+                            viewModel.searchRepository(it)
+                        }
                     }
                     return@setOnEditorActionListener true
                 }
@@ -66,24 +68,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     /**
-     * 対象のリポジトリへ遷移する
-     */
-    fun gotoRepositoryFragment(item: RepositoryProperty) {
-        val action = SearchFragmentDirections.actionSearchFragmentToRepositoryShowFragment(item)
-        findNavController().navigate(action)
-    }
-
-    /**
      * 検索結果の更新を受け取ったときの処理
      */
-    private val searchResultObserver: Observer<List<RepositoryProperty>> = Observer {
+    private val searchResultObserver: Observer<List<SearchResultItem>> = Observer {
         adapter.submitList(it)
     }
 
     /**
-     * 検索画面何らかの原因によって失敗したときの処理
+     * 検索が何らかの原因によって失敗したときの処理
      */
-    private val searchErrorObserver: Observer<SearchApiResult.Error?> = Observer {
+    private val searchErrorObserver: Observer<SearchApiResponse.Error?> = Observer {
         // nullになったことを受け取った場合は何もしない
         val error = when (it) {
             null -> return@Observer
@@ -91,13 +85,47 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
 
         val toastText = when (error) {
-            is SearchApiResult.Error.ByNetwork -> R.string.error_by_network
-            is SearchApiResult.Error.ByQuery -> R.string.error_by_query
-            is SearchApiResult.Error.ByUnknownSource -> R.string.error_by_unknwoun_reason
+            is SearchApiResponse.Error.ByNetwork -> R.string.error_by_network
+            is SearchApiResponse.Error.ByQuery -> R.string.error_by_query
+            is SearchApiResponse.Error.ByUnknownSource -> R.string.error_by_unknwoun_reason
         }
 
         Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT).show()
-        Log.i("SearchFragment", "Error \"${error.causedBy}\" happened ")
+        Log.i("Repository search error", "Error \"${error.causedBy}\" happened ")
         viewModel.errorMessageRecieved()
+    }
+
+    /**
+     * 検索中かどうかを視覚的にわかりやすくするための書影
+     */
+    private val searchProgressObserver: Observer<Boolean> = Observer {
+        binding.searchProgress.visibility = when (it) {
+            true -> View.VISIBLE
+            false -> View.INVISIBLE
+        }
+    }
+
+    /**
+     * 検索結果表示用の項目を選択したときの挙動
+     */
+    override fun itemClick(item: SearchResultItem) {
+        when (item) {
+            SearchResultItem.EmptyItem -> {} // ※何らかの拍子に選択できてしまったときの事故防止
+            is SearchResultItem.Repository -> gotoRepositoryFragment(item.repository)
+            SearchResultItem.SearchNextItem -> {
+                if (viewModel.canUseSearchApi) {
+                    viewModel.startSearchFromUI()
+                    viewModel.nextPage()
+                }
+            }
+        }
+    }
+
+    /**
+     * 対象のリポジトリへ遷移する
+     */
+    private fun gotoRepositoryFragment(item: RepositoryProperty) {
+        val action = SearchFragmentDirections.actionSearchFragmentToRepositoryShowFragment(item)
+        findNavController().navigate(action)
     }
 }

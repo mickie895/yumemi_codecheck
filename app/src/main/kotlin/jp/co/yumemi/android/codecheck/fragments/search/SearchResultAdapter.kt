@@ -3,49 +3,64 @@
  */
 package jp.co.yumemi.android.codecheck.fragments.search
 
+import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import jp.co.yumemi.android.codecheck.R
-import jp.co.yumemi.android.codecheck.data.RepositoryProperty
+import jp.co.yumemi.android.codecheck.databinding.LayoutItemBinding
+import jp.co.yumemi.android.codecheck.viewmodels.SearchResultItem
 
-val diff_util = object : DiffUtil.ItemCallback<RepositoryProperty>() {
-    override fun areItemsTheSame(oldItem: RepositoryProperty, newItem: RepositoryProperty): Boolean {
-        return oldItem.name == newItem.name
+val diff_util = object : DiffUtil.ItemCallback<SearchResultItem>() {
+    override fun areItemsTheSame(oldItem: SearchResultItem, newItem: SearchResultItem): Boolean {
+        return oldItem.isSameItem(newItem)
     }
 
-    override fun areContentsTheSame(oldItem: RepositoryProperty, newItem: RepositoryProperty): Boolean {
+    override fun areContentsTheSame(oldItem: SearchResultItem, newItem: SearchResultItem): Boolean {
         return oldItem == newItem
     }
 }
 
 class SearchResultAdapter(
     private val itemClickListener: OnItemClickListener,
-) : ListAdapter<RepositoryProperty, SearchResultAdapter.ViewHolder>(diff_util) {
+) : ListAdapter<SearchResultItem, SearchResultAdapter.SearchResultViewHolder>(diff_util) {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    class SearchResultViewHolder(val binding: LayoutItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun getCurrentContext(): Context {
+            return binding.root.context
+        }
+    }
 
     interface OnItemClickListener {
-        fun itemClick(item: RepositoryProperty)
+        fun itemClick(item: SearchResultItem)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.layout_item, parent, false)
-        return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
+        val binding = LayoutItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false,
+        )
+        return SearchResultViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val repositoryProperty = getItem(position)
-        (holder.itemView.findViewById<View>(R.id.itemName) as TextView).text =
-            repositoryProperty.name
+    override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
+        val item = getItem(position)
+
+        // 項目によって表示する内容を変更する
+        holder.binding.itemName.text = when (item) {
+            SearchResultItem.EmptyItem -> holder.getCurrentContext().getString(R.string.empty_items)
+            is SearchResultItem.Repository -> item.repository.name
+            SearchResultItem.SearchNextItem -> holder.getCurrentContext().getString(R.string.next_page)
+        }
 
         holder.itemView.setOnClickListener {
-            itemClickListener.itemClick(repositoryProperty)
+            itemClickListener.itemClick(item)
         }
+
+        // 空のときの表示メッセージのときはクリックできない
+        holder.itemView.isClickable = item != SearchResultItem.EmptyItem
     }
 }

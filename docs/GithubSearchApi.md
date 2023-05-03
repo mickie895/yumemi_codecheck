@@ -10,8 +10,8 @@ https://docs.github.com/ja/rest/search?apiVersion=2022-11-28#search-repositories
   - 一度にAPIで取得できる件数は限られている
   - 今まで取得できた件数より多かったとき、検索結果には続きがあることになる（追加する方法を考える）
 - incomplete_results
-  - 負荷がかかっていたときなどにtrueになる
-  - 取得件数のカウントがずれるため、trueだったときは続きの取得は避けたほうが良さそうに思える
+  - 件数が多すぎたりすると時間が制限されてtrueになる
+  - 正常な結果でもtrueになることがあるので無視する
 - items
   - 文字通り検索結果の中身
 
