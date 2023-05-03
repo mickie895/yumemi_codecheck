@@ -14,14 +14,6 @@ class GithubApiRepository @Inject constructor(private val apiService: GithubApiS
     private lateinit var lastSearchQuery: String
 
     /**
-     * 次のページを検索できるかどうかの確認
-     */
-    val canSearchNextPage: Boolean
-        get() {
-            return lastSearchRepositories.canAppendResult
-        }
-
-    /**
      * 与えられた文字列をもとにリポジトリの検索を行う
      */
     suspend fun searchQuery(query: String): SearchApiResponse {
@@ -29,7 +21,6 @@ class GithubApiRepository @Inject constructor(private val apiService: GithubApiS
             val result = apiService.search(query)
             lastSearchRepositories = AppendableRepositoryList(result)
             lastSearchQuery = query
-            lastSearchRepositories.currentList()
         }
     }
 
@@ -38,18 +29,18 @@ class GithubApiRepository @Inject constructor(private val apiService: GithubApiS
      */
     suspend fun nextPage(): SearchApiResponse {
         return searchStrategy {
-            val result = apiService.search(lastSearchQuery, lastSearchRepositories.nextPage)
+            val result = apiService.search(lastSearchQuery, lastSearchRepositories.nextPage, lastSearchRepositories.perPage)
             lastSearchRepositories.appendResult(result)
-            lastSearchRepositories.currentList()
         }
     }
 
     /**
      * リポジトリ検索の一連の流れを共通化するための関数
      */
-    private suspend fun searchStrategy(work: suspend () -> List<RepositoryProperty>): SearchApiResponse {
+    private suspend fun searchStrategy(work: suspend () -> Unit): SearchApiResponse {
         return try {
-            SearchApiResponse.Ok(work())
+            work()
+            SearchApiResponse.Ok(lastSearchRepositories)
         } catch (e: Exception) {
             createFailedInstanceFrom(e)
         }

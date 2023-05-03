@@ -37,6 +37,10 @@ class AppendableRepositoryList(private var searchResult: RepositorySearchResult)
     val canAppendResult: Boolean
         get() = searchedPage * perPage < searchResult.totalCount && !searchResult.incompleteResults
 
+    fun isEmpty(): Boolean {
+        return repositoryList.isEmpty()
+    }
+
     /**
      * 検索結果を現在のデータに追記する
      */
@@ -45,4 +49,8 @@ class AppendableRepositoryList(private var searchResult: RepositorySearchResult)
         repositoryList.addAll(searchResult.searchedItemList)
         nextPage++
     }
+}
+
+fun createDefaultResultList(): AppendableRepositoryList {
+    return AppendableRepositoryList(RepositorySearchResult(listOf(), 0, false))
 }

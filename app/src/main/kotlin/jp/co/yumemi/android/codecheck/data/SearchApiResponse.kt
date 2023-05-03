@@ -10,7 +10,7 @@ sealed class SearchApiResponse {
     /**
      * 正常終了
      */
-    class Ok(val result: List<RepositoryProperty>) : SearchApiResponse()
+    class Ok(val result: AppendableRepositoryList) : SearchApiResponse()
 
     /**
      * 異常終了

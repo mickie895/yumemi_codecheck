@@ -9,9 +9,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.co.yumemi.android.codecheck.data.AppendableRepositoryList
 import jp.co.yumemi.android.codecheck.data.GithubApiRepository
-import jp.co.yumemi.android.codecheck.data.RepositoryProperty
 import jp.co.yumemi.android.codecheck.data.SearchApiResponse
+import jp.co.yumemi.android.codecheck.data.createDefaultResultList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -27,12 +28,14 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
     /**
      * 検索結果の実際の格納先
      */
-    private val repositoryListSource: MutableLiveData<List<RepositoryProperty>> = MutableLiveData()
+    private val repositoryListSource: MutableLiveData<List<SearchResultItem>> = MutableLiveData(
+        convertApiResponse(createDefaultResultList()),
+    )
 
     /**
      * UIで利用する検索結果の一覧のLiveData
      */
-    val searchedRepositoryList: LiveData<List<RepositoryProperty>> = repositoryListSource
+    val searchedRepositoryList: LiveData<List<SearchResultItem>> = repositoryListSource
 
     /**
      * 最後に発生したエラーの格納先
@@ -67,21 +70,36 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
     fun nextPage(): Job =
         searchStrategy { searchApi.nextPage() }
 
-    val canSearchNextPage: Boolean
-        get() {
-            return searchApi.canSearchNextPage
-        }
-
     /**
      * 検索APIを起動するときの共通処理
      */
     private fun searchStrategy(strategy: suspend () -> SearchApiResponse): Job =
         viewModelScope.launch(Dispatchers.IO) {
-            when (val searchApiResult = strategy()) {
+            when (val searchApiResponse = strategy()) {
                 is SearchApiResponse.Error ->
-                    lastErrorSource.postValue(searchApiResult)
+                    lastErrorSource.postValue(searchApiResponse)
                 is SearchApiResponse.Ok ->
-                    repositoryListSource.postValue(searchApiResult.result)
+                    repositoryListSource.postValue(convertApiResponse(searchApiResponse.result))
             }
         }
+
+    /**
+     * Apiからの結果をもとに検索結果欄に表示させるリストを作成する
+     */
+    private fun convertApiResponse(response: AppendableRepositoryList): List<SearchResultItem> {
+        val result: MutableList<SearchResultItem> =
+            response.currentList().map { item -> SearchResultItem.Repository(item) }.toMutableList()
+
+        if (response.canAppendResult) {
+            result.add(SearchResultItem.SearchNextItem)
+            return result
+        }
+
+        if (response.isEmpty()) {
+            result.add(SearchResultItem.EmptyItem)
+            return result
+        }
+
+        return result
+    }
 }
