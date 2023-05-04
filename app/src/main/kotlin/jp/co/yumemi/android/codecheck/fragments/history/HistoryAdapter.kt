@@ -22,9 +22,16 @@ private val diff_util = object : DiffUtil.ItemCallback<SearchHistory>() {
 }
 
 /**
- * 履歴表示用のアダプター
+ * 履歴表示用のアダプタ
  */
-class HistoryAdapter : ListAdapter<SearchHistory, HistoryAdapter.HistoryViewHolder>(diff_util) {
+class HistoryAdapter(private val onHistoryClickedListener: OnHistoryClickedListener) : ListAdapter<SearchHistory, HistoryAdapter.HistoryViewHolder>(diff_util) {
+    /**
+     * 履歴のアイテムをクリックしたことが通知されるリスナ
+     */
+    interface OnHistoryClickedListener {
+        fun onHistoryClicked(query: String)
+    }
+
     class HistoryViewHolder(val binding: LayoutHistoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun getCurrentContext(): Context {
@@ -49,6 +56,9 @@ class HistoryAdapter : ListAdapter<SearchHistory, HistoryAdapter.HistoryViewHold
                 DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM)
                     .format(this.searchedDate),
             )
+            holder.itemView.setOnClickListener {
+                onHistoryClickedListener.onHistoryClicked(this.query)
+            }
         }
     }
 }
