@@ -9,13 +9,13 @@ import javax.inject.Inject
 
 class HistoryRepository @Inject constructor(
     database: HistoryDatabase,
-) {
+) : IHistoryRepository {
     private val dao: HistoryDao = database.historyDao()
 
     /**
      * 新しい履歴を追加する
      */
-    suspend fun appendHistory(query: String) {
+    override suspend fun appendHistory(query: String) {
         withContext(Dispatchers.IO) {
             dao.appendQueryHistory(query)
         }
@@ -24,5 +24,5 @@ class HistoryRepository @Inject constructor(
     /**
      * 現在の履歴一覧
      */
-    fun history(): Flow<List<SearchHistory>> = dao.getHistory()
+    override fun history(): Flow<List<SearchHistory>> = dao.getHistory()
 }

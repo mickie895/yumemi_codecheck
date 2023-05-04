@@ -7,6 +7,7 @@ import jp.co.yumemi.android.codecheck.data.sampleErrorResult
 import jp.co.yumemi.android.codecheck.data.search.GithubApiRepository
 import jp.co.yumemi.android.codecheck.restapi.mock.MockedGithubApiService
 import jp.co.yumemi.android.codecheck.restapi.mock.getMockService
+import jp.co.yumemi.android.codecheck.room.mock.MockHistoryRepository
 import jp.co.yumemi.android.codecheck.util.MainCoroutineRule
 import jp.co.yumemi.android.codecheck.viewmodels.SearchFragmentViewModel
 import jp.co.yumemi.android.codecheck.viewmodels.SearchResultItem
@@ -26,6 +27,8 @@ class SearchViewModelTest {
     // 動作を調整しながら確認するためのモック
     private lateinit var apiService: MockedGithubApiService
 
+    private val historyRepository = MockHistoryRepository()
+
     // Run tasks synchronously
     @Rule
     @JvmField
@@ -39,7 +42,7 @@ class SearchViewModelTest {
     @Before
     fun setUp() {
         apiService = getMockService(sampleApiResult)
-        viewModel = SearchFragmentViewModel(GithubApiRepository(apiService))
+        viewModel = SearchFragmentViewModel(GithubApiRepository(apiService), historyRepository)
     }
 
     /**

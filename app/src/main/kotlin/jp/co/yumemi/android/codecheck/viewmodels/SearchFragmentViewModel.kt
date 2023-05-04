@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.co.yumemi.android.codecheck.data.history.IHistoryRepository
 import jp.co.yumemi.android.codecheck.data.search.AppendableRepositoryList
 import jp.co.yumemi.android.codecheck.data.search.GithubApiRepository
 import jp.co.yumemi.android.codecheck.data.search.SearchApiResponse
@@ -22,7 +23,10 @@ import javax.inject.Inject
  * 検索用画面のビューモデル
  */
 @HiltViewModel
-class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubApiRepository) :
+class SearchFragmentViewModel @Inject constructor(
+    private val searchApi: GithubApiRepository,
+    private val historyRepository: IHistoryRepository,
+) :
     ViewModel() {
 
     /**
@@ -52,7 +56,7 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
     private val searchingSource: MutableLiveData<Boolean> = MutableLiveData(false)
 
     /**
-     * 現在検索している状態化どうかの確認
+     * 現在検索している状態かどうかの確認
      */
     val searching: LiveData<Boolean> = searchingSource
 
@@ -74,7 +78,11 @@ class SearchFragmentViewModel @Inject constructor(private val searchApi: GithubA
      * リポジトリの検索をRepository層に依頼する
      */
     fun searchRepository(inputText: String): Job =
-        searchStrategy { searchApi.searchQuery(inputText) }
+        searchStrategy {
+            // 新規検索時は履歴を追加する
+            historyRepository.appendHistory(inputText)
+            searchApi.searchQuery(inputText)
+        }
 
     /**
      * 次のページのデータの取得をRepository層に依頼する
