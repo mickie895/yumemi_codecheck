@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.codecheck.R
-import jp.co.yumemi.android.codecheck.data.RepositoryProperty
-import jp.co.yumemi.android.codecheck.data.SearchApiResponse
+import jp.co.yumemi.android.codecheck.data.search.RepositoryProperty
+import jp.co.yumemi.android.codecheck.data.search.SearchApiResponse
 import jp.co.yumemi.android.codecheck.databinding.FragmentSearchBinding
 import jp.co.yumemi.android.codecheck.viewmodels.SearchFragmentViewModel
 import jp.co.yumemi.android.codecheck.viewmodels.SearchResultItem

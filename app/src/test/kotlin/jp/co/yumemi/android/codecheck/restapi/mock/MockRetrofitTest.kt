@@ -2,8 +2,8 @@ package jp.co.yumemi.android.codecheck.restapi.mock
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import jp.co.yumemi.android.codecheck.data.RepositorySearchResult
 import jp.co.yumemi.android.codecheck.data.sampleApiResult
+import jp.co.yumemi.android.codecheck.data.search.RepositorySearchResult
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test

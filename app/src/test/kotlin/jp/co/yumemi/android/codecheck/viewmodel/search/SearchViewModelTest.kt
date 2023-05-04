@@ -1,10 +1,10 @@
 package jp.co.yumemi.android.codecheck.viewmodel.search
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import jp.co.yumemi.android.codecheck.data.GithubApiRepository
 import jp.co.yumemi.android.codecheck.data.emptyApiResult
 import jp.co.yumemi.android.codecheck.data.sampleApiResult
 import jp.co.yumemi.android.codecheck.data.sampleErrorResult
+import jp.co.yumemi.android.codecheck.data.search.GithubApiRepository
 import jp.co.yumemi.android.codecheck.restapi.mock.MockedGithubApiService
 import jp.co.yumemi.android.codecheck.restapi.mock.getMockService
 import jp.co.yumemi.android.codecheck.util.MainCoroutineRule

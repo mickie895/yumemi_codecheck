@@ -4,8 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jp.co.yumemi.android.codecheck.data.restapi.GithubApiService
-import jp.co.yumemi.android.codecheck.data.restapi.createRetrofit
+import jp.co.yumemi.android.codecheck.data.search.restapi.GithubApiService
+import jp.co.yumemi.android.codecheck.data.search.restapi.createRetrofit
 import javax.inject.Singleton
 
 // GithubAPIを利用するために必要なモジュールの準備を行うクラス

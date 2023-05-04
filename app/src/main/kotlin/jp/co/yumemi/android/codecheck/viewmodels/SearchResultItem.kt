@@ -1,6 +1,6 @@
 package jp.co.yumemi.android.codecheck.viewmodels
 
-import jp.co.yumemi.android.codecheck.data.RepositoryProperty
+import jp.co.yumemi.android.codecheck.data.search.RepositoryProperty
 
 /**
  * 検索結果のリストに表示させることができる項目

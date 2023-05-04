@@ -1,4 +1,4 @@
-package jp.co.yumemi.android.codecheck.data
+package jp.co.yumemi.android.codecheck.data.search
 
 /**
  * エラーハンドリング対応用のAPIの実行結果

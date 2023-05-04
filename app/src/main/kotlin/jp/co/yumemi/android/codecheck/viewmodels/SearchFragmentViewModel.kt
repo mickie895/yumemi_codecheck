@@ -9,10 +9,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.co.yumemi.android.codecheck.data.AppendableRepositoryList
-import jp.co.yumemi.android.codecheck.data.GithubApiRepository
-import jp.co.yumemi.android.codecheck.data.SearchApiResponse
-import jp.co.yumemi.android.codecheck.data.createDefaultResultList
+import jp.co.yumemi.android.codecheck.data.search.AppendableRepositoryList
+import jp.co.yumemi.android.codecheck.data.search.GithubApiRepository
+import jp.co.yumemi.android.codecheck.data.search.SearchApiResponse
+import jp.co.yumemi.android.codecheck.data.search.createDefaultResultList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

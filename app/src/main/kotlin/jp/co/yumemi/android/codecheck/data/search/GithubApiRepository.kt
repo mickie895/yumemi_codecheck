@@ -1,6 +1,6 @@
-package jp.co.yumemi.android.codecheck.data
+package jp.co.yumemi.android.codecheck.data.search
 
-import jp.co.yumemi.android.codecheck.data.restapi.GithubApiService
+import jp.co.yumemi.android.codecheck.data.search.restapi.GithubApiService
 import javax.inject.Inject
 
 /**
