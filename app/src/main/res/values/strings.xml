@@ -11,4 +11,6 @@
     <string name="history">Search History</string>
     <string name="clear_history">Clear</string>
     <string name="history_date_format">Searched at %s</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_history">History</string>
 </resources>

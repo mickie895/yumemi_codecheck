@@ -25,4 +25,14 @@
             app:argType="jp.co.yumemi.android.codecheck.data.search.RepositoryProperty" />
     </fragment>
 
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="jp.co.yumemi.android.codecheck.fragments.history.HistoryFragment"
+        android:label="@string/history" >
+        <action
+            android:id="@+id/action_historyFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
