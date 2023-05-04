@@ -10,4 +10,5 @@
     <string name="next_page">Click here to search next items.</string>
     <string name="history">Search History</string>
     <string name="clear_history">Clear</string>
+    <string name="history_date_format">Searched at %s</string>
 </resources>
