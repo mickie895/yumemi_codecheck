@@ -12,7 +12,7 @@ private const val HISTORY_ITEMS = 10
 
 @Dao
 interface HistoryDao {
-    @Query("SELECT * FROM history ORDER BY id DESC LIMIT $HISTORY_ITEMS")
+    @Query("SELECT * FROM SearchHistory ORDER BY id DESC LIMIT $HISTORY_ITEMS")
     fun getHistory(): Flow<List<SearchHistory>>
 
     @Insert

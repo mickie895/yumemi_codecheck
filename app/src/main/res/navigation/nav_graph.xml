@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_repository_show">
         <argument
             android:name="repository"
-            app:argType="jp.co.yumemi.android.codecheck.data.RepositoryProperty" />
+            app:argType="jp.co.yumemi.android.codecheck.data.search.RepositoryProperty" />
     </fragment>
 
 </navigation>
