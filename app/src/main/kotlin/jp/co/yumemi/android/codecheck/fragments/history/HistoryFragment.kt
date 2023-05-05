@@ -29,6 +29,7 @@ class HistoryFragment : HistoryAdapter.OnHistoryClickedListener, Fragment(R.layo
         super.onViewCreated(view, savedInstanceState)
         bindingSource = FragmentHistoryBinding.bind(view)
         viewModel.historyList.observe(viewLifecycleOwner, historyListObserver)
+        viewModel.searching.observe(viewLifecycleOwner, searchingStateObserver)
 
         adapter = HistoryAdapter(this)
         binding.historyList.layoutManager = LinearLayoutManager(requireContext())
@@ -48,11 +49,20 @@ class HistoryFragment : HistoryAdapter.OnHistoryClickedListener, Fragment(R.layo
     }
 
     /**
+     * 通信状況の切り替えに追従させる
+     */
+    private val searchingStateObserver = Observer<Boolean> {
+        binding.historyList.isEnabled = !it
+    }
+
+    /**
      * 検索履歴を選択したときの処理
      */
     override fun onHistoryClicked(query: String) {
-        viewModel.searchFromHistory(query)
-        // 選択したら前画面に戻す
-        findNavController().navigate(R.id.action_historyFragment_to_searchFragment)
+        if (viewModel.searching.value == false) {
+            viewModel.searchFromHistory(query)
+            // 選択したら前画面に戻す
+            findNavController().popBackStack()
+        }
     }
 }

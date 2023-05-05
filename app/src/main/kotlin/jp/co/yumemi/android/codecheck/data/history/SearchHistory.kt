@@ -6,7 +6,7 @@ import java.util.Date
 
 @Entity
 data class SearchHistory(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
     val query: String,
     val searchedDate: Date,

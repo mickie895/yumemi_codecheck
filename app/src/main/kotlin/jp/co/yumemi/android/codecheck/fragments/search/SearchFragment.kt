@@ -56,10 +56,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
             .setOnEditorActionListener { editText, action, _ ->
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
                     editText.text.toString().let {
-                        if (viewModel.canUseSearchApi) {
-                            viewModel.startSearchFromUI()
-                            viewModel.searchRepository(it)
-                        }
+                        viewModel.search(it)
                     }
                     return@setOnEditorActionListener true
                 }
@@ -112,12 +109,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
         when (item) {
             SearchResultItem.EmptyItem -> {} // ※何らかの拍子に選択できてしまったときの事故防止
             is SearchResultItem.Repository -> gotoRepositoryFragment(item.repository)
-            SearchResultItem.SearchNextItem -> {
-                if (viewModel.canUseSearchApi) {
-                    viewModel.startSearchFromUI()
-                    viewModel.nextPage()
-                }
-            }
+            SearchResultItem.SearchNextItem -> viewModel.nextPage()
         }
     }
 
