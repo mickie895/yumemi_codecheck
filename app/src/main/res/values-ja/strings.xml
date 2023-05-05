@@ -13,4 +13,7 @@
     <string name="history_date_format">検索日時：%s</string>
     <string name="menu_search">検索</string>
     <string name="menu_history">履歴</string>
+    <string name="clear_history_confirm">履歴を削除します。よろしいですか？</string>
+    <string name="button_delete">削除</string>
+    <string name="button_cansel">キャンセル</string>
 </resources>

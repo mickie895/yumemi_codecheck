@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+/**
+ * 検索履歴表示用リポジトリ
+ */
 class HistoryRepository @Inject constructor(
     database: HistoryDatabase,
 ) : IHistoryRepository {
@@ -25,4 +28,13 @@ class HistoryRepository @Inject constructor(
      * 現在の履歴一覧
      */
     override fun history(): Flow<List<SearchHistory>> = dao.getHistory()
+
+    /**
+     * 履歴の削除
+     */
+    override suspend fun clearHistory() {
+        withContext(Dispatchers.IO) {
+            dao.deleteHistory()
+        }
+    }
 }

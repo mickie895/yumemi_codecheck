@@ -18,6 +18,9 @@ interface HistoryDao {
     @Insert
     fun addHistory(lastHistory: SearchHistory)
 
+    @Query("DELETE FROM SearchHistory")
+    fun deleteHistory()
+
     /**
      * 検索結果を追加する
      */

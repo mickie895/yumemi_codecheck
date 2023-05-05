@@ -12,4 +12,9 @@ interface IHistoryRepository {
      * 現在の履歴一覧
      */
     fun history(): Flow<List<SearchHistory>>
+
+    /**
+     * 履歴の削除
+     */
+    suspend fun clearHistory()
 }

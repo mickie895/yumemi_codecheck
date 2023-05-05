@@ -29,6 +29,9 @@ class HistoryAdapter(private val onHistoryClickedListener: OnHistoryClickedListe
      * 履歴のアイテムをクリックしたことが通知されるリスナ
      */
     interface OnHistoryClickedListener {
+        /**
+         * 履歴が選択されたことの通知
+         */
         fun onHistoryClicked(query: String)
     }
 
