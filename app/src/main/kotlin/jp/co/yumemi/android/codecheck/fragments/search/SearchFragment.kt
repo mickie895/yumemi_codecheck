@@ -7,6 +7,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -28,7 +29,8 @@ import jp.co.yumemi.android.codecheck.viewmodels.SearchResultItem
 class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.OnItemClickListener {
     // おおよそテンプレート化されている実装
 
-    private val viewModel: SearchFragmentViewModel by viewModels()
+    @VisibleForTesting
+    val viewModel: SearchFragmentViewModel by viewModels()
 
     private var bindingSource: FragmentSearchBinding? = null
     private val binding: FragmentSearchBinding get() = bindingSource!!
@@ -38,6 +40,9 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
         super.onViewCreated(view, savedInstanceState)
 
         bindingSource = FragmentSearchBinding.bind(view)
+
+        // 最初にからリポジトリの表示が入るから＋1からスタートされる
+        viewModel.idlingResource.increment()
 
         // 値変化時の見た目の追従
         viewModel.searchedRepositoryList.observe(viewLifecycleOwner, searchResultObserver)
@@ -82,7 +87,9 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
      * 検索結果の更新を受け取ったときの処理
      */
     private val searchResultObserver: Observer<List<SearchResultItem>> = Observer {
-        adapter.submitList(it)
+        adapter.submitList(it) {
+            viewModel.idlingResource.decrement()
+        }
     }
 
     /**

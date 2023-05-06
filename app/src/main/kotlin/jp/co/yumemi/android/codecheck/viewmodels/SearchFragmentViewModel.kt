@@ -16,6 +16,7 @@ import jp.co.yumemi.android.codecheck.data.search.GithubApiRepository
 import jp.co.yumemi.android.codecheck.data.search.SearchApiResponse
 import jp.co.yumemi.android.codecheck.data.search.events.OnSearchResultRecievedListener
 import jp.co.yumemi.android.codecheck.data.search.events.OnSearchStateChangedListener
+import jp.co.yumemi.android.codecheck.fragments.testutils.SearchFragmentIdlingResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -28,6 +29,7 @@ import javax.inject.Inject
 class SearchFragmentViewModel @Inject constructor(
     private val searchApi: GithubApiRepository,
     private val historyRepository: IHistoryRepository,
+    val idlingResource: SearchFragmentIdlingResource,
 ) :
     OnSearchStateChangedListener,
     OnSearchResultRecievedListener,
@@ -102,6 +104,7 @@ class SearchFragmentViewModel @Inject constructor(
         if (inputText.isEmpty() || searchApi.searching) {
             return
         }
+        idlingResource.increment()
         searchApi.startSearch()
 
         // ※主にテストのためにUIスレッド外で動かす必要のある処理を切り出している
@@ -123,6 +126,7 @@ class SearchFragmentViewModel @Inject constructor(
         if (searchApi.searching) {
             return
         }
+        idlingResource.increment()
         searchApi.startSearch()
         postNextPageJob()
     }
@@ -137,7 +141,7 @@ class SearchFragmentViewModel @Inject constructor(
     /**
      * 検索APIを起動するときの共通処理
      */
-    private fun searchStrategy(strategy: suspend () -> SearchApiResponse): Job =
+    private fun searchStrategy(strategy: suspend () -> Unit): Job =
         viewModelScope.launch(Dispatchers.IO) {
             strategy()
         }

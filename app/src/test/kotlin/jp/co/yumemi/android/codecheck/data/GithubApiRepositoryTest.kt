@@ -2,13 +2,26 @@ package jp.co.yumemi.android.codecheck.data
 
 import jp.co.yumemi.android.codecheck.data.search.GithubApiRepository
 import jp.co.yumemi.android.codecheck.data.search.SearchApiResponse
+import jp.co.yumemi.android.codecheck.data.search.events.OnSearchResultRecievedListener
 import jp.co.yumemi.android.codecheck.restapi.mock.getMockService
 import jp.co.yumemi.android.codecheck.restapi.mock.getServerErrorMockService
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
 
+/**
+ * リポジトリ層に対するテスト
+ */
 class GithubApiRepositoryTest {
+
+    private lateinit var queryResult: SearchApiResponse
+
+    private val listener = object : OnSearchResultRecievedListener {
+        override fun onSearchResultRecieved(response: SearchApiResponse) {
+            queryResult = response
+        }
+    }
+
     /**
      * GithubAPIが正常なときの動作チェック
      */
@@ -16,18 +29,18 @@ class GithubApiRepositoryTest {
     fun normalQueryTest() = runTest {
         val apiService = getMockService(sampleApiResult)
         val repository = GithubApiRepository(apiService)
+        repository.setSearchResultRecievedListener(listener)
 
-        val queryResult = repository.searchQuery("git")
+        repository.searchQuery("git")
         Assert.assertTrue("正常判定", queryResult is SearchApiResponse.Ok)
 
         apiService.nextApiResult = emptyApiResult
-        val emptyResult = repository.searchQuery("git")
-        Assert.assertTrue("空の結果も正常である", emptyResult is SearchApiResponse.Ok)
+        repository.searchQuery("git")
+        Assert.assertTrue("空の結果も正常である", queryResult is SearchApiResponse.Ok)
 
         apiService.nextApiResult = sampleErrorResult
-        val errorResult = repository.searchQuery("git")
-        Assert.assertTrue("失敗を受け取れていることの確認", errorResult is SearchApiResponse.Error)
-        Assert.assertTrue("失敗時は対応する返答を返す", errorResult is SearchApiResponse.Error.ByQuery)
+        repository.searchQuery("git")
+        Assert.assertTrue("失敗時は対応する返答を返す", queryResult is SearchApiResponse.Error.ByQuery)
     }
 
     /**
@@ -38,8 +51,9 @@ class GithubApiRepositoryTest {
         val repository = GithubApiRepository(
             getServerErrorMockService(sampleApiResult),
         )
-        val errorResult = repository.searchQuery("git")
-        Assert.assertTrue("失敗を受け取れていることの確認", errorResult is SearchApiResponse.Error)
-        Assert.assertTrue("失敗時は対応する返答を返す", errorResult is SearchApiResponse.Error.ByQuery)
+        repository.setSearchResultRecievedListener(listener)
+
+        repository.searchQuery("git")
+        Assert.assertTrue("失敗時は対応する返答を返す", queryResult is SearchApiResponse.Error.ByQuery)
     }
 }
