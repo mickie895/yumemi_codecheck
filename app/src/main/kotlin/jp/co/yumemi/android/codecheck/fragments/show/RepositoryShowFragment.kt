@@ -40,24 +40,32 @@ class RepositoryShowFragment : Fragment(R.layout.fragment_repository_show) {
         setRepositoryStatus(args.repository)
     }
 
-    private fun setRepositoryStatus(property: RepositoryProperty) {
-        binding.ownerIcon.load(property.owner.avatarIconUrl)
-        binding.repositoryName.text = property.name
-
-        binding.languageDescription.text =
-            when (property.language) {
-                null -> getString(R.string.no_language_detected)
-                else -> getString(R.string.written_language, property.language)
-            }
-
-        binding.stars.text = resources.getQuantityText(R.plurals.stars, property.stargazersCount)
-        binding.watchers.text = resources.getQuantityText(R.plurals.watchers, property.watchersCount)
-        binding.forks.text = resources.getQuantityText(R.plurals.forks, property.forksCount)
-        binding.issues.text = resources.getQuantityText(R.plurals.issues, property.openIssuesCount)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         bindingSource = null
+    }
+
+    /**
+     * 与えられたリポジトリに合わせた表記を行う
+     */
+    private fun setRepositoryStatus(property: RepositoryProperty) {
+        with(binding) {
+            ownerIcon.load(property.owner.avatarIconUrl)
+            repositoryName.text = property.name
+
+            languageDescription.text =
+                when (property.language) {
+                    null -> getString(R.string.no_language_detected)
+                    else -> getString(R.string.written_language, property.language)
+                }
+
+            stars.text =
+                resources.getQuantityText(R.plurals.stars, property.stargazersCount)
+            watchers.text =
+                resources.getQuantityText(R.plurals.watchers, property.watchersCount)
+            forks.text = resources.getQuantityText(R.plurals.forks, property.forksCount)
+            issues.text =
+                resources.getQuantityText(R.plurals.issues, property.openIssuesCount)
+        }
     }
 }

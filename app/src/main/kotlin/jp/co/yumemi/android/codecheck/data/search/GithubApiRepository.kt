@@ -70,7 +70,7 @@ class GithubApiRepository @Inject constructor(private val apiService: GithubApiS
     /**
      * 与えられた文字列をもとにリポジトリの検索を行う
      */
-    suspend fun searchQuery(query: String): SearchApiResponse {
+    suspend fun searchQuery(query: String) {
         return searchStrategy {
             val result = apiService.search(query)
             lastSearchRepositories = AppendableRepositoryList(result)
@@ -82,7 +82,7 @@ class GithubApiRepository @Inject constructor(private val apiService: GithubApiS
     /**
      * 次のページの検索を行う
      */
-    suspend fun nextPage(): SearchApiResponse {
+    suspend fun nextPage() {
         return searchStrategy {
             val result = apiService.search(
                 lastSearchQuery,
@@ -102,8 +102,10 @@ class GithubApiRepository @Inject constructor(private val apiService: GithubApiS
 
     /**
      * リポジトリ検索の一連の流れを共通化するための関数
+     *
+     * @param work APIを使った検索処理
      */
-    private suspend fun searchStrategy(work: suspend () -> Unit): SearchApiResponse {
+    private suspend fun searchStrategy(work: suspend () -> Unit) {
         val result =
             try {
                 work()
@@ -111,7 +113,7 @@ class GithubApiRepository @Inject constructor(private val apiService: GithubApiS
             } catch (e: Exception) {
                 createFailedInstanceFrom(e)
             }
+        // 検索結果をイベントの形で通知する
         onSearchResultRecieved(result)
-        return result
     }
 }

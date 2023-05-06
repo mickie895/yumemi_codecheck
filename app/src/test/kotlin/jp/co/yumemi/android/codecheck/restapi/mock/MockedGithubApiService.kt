@@ -63,7 +63,7 @@ fun getMockService(apiResult: String): MockedGithubApiService {
 }
 
 /**
- * サーバのえらーが返ってくるときのモックの取得
+ * サーバのエラーが返ってくるときのモックの取得
  */
 fun getServerErrorMockService(apiResult: String): MockedGithubApiService {
     return MockedGithubApiService(createDelegateFrom(NetworkBehaviorFactory.alwaysFailBehavior()), apiResult)

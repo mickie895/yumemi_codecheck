@@ -16,18 +16,22 @@ import jp.co.yumemi.android.codecheck.data.search.restapi.createRetrofit
 import javax.inject.Singleton
 
 // GithubAPIを利用するために必要なモジュールの準備を行うファイル
-// メンテナンス性のために一つのファイルに纏めている
+// メンテナンス性のためにプロジェクト固有のモジュールを一つのファイルに纏めている
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ProvideModule {
+object ApiModule {
 
     @Provides
     @Singleton
     fun provideApiService(): GithubApiService {
         return createRetrofit().create(GithubApiService::class.java)
     }
+}
 
+@Module
+@InstallIn(SingletonComponent::class)
+object HistoryModule {
     @Singleton
     @Provides
     fun provideHistoryDatabase(@ApplicationContext context: Context): HistoryDatabase {

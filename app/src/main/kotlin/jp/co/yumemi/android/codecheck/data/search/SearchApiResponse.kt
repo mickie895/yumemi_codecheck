@@ -35,6 +35,8 @@ sealed class SearchApiResponse {
 
 /**
  * エラー原因の振り分けを行う
+ *
+ * @param causedBy スローされた例外
  */
 fun createFailedInstanceFrom(causedBy: Exception): SearchApiResponse.Error {
     // ※実際に動かして見た結果なので見落としを発見したら都度追加すること

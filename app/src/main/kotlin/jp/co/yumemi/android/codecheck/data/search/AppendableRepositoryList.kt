@@ -43,6 +43,8 @@ class AppendableRepositoryList(private var searchResult: RepositorySearchResult)
 
     /**
      * 検索結果を現在のデータに追記する
+     *
+     * @param nextPageResult 追記する対象の検索結果
      */
     fun appendResult(nextPageResult: RepositorySearchResult) {
         searchResult = nextPageResult
@@ -51,6 +53,9 @@ class AppendableRepositoryList(private var searchResult: RepositorySearchResult)
     }
 }
 
+/**
+ * 主に初期状態を示すのに使う、空の検索結果のインスタンスを作成する
+ */
 fun createDefaultResultList(): AppendableRepositoryList {
     return AppendableRepositoryList(RepositorySearchResult(listOf(), 0))
 }

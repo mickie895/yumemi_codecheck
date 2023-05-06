@@ -14,6 +14,10 @@ import jp.co.yumemi.android.codecheck.R
  */
 @AndroidEntryPoint
 class ClearHistoryDialog : DialogFragment() {
+    // ダイアログとフラグメントの間のライフサイクルの差と、
+    // 親画面に結果を教えるためのイベントの作成の手段を考慮するのが非常に面倒なため、
+    // ビューモデル経由でこのダイアログに履歴の削除を行わせる。
+
     private val viewModel: ClearHistoryViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -35,7 +39,6 @@ class ClearHistoryDialog : DialogFragment() {
      * 削除ボタンが押されたときのリスナ
      */
     private val onClearNeeded = DialogInterface.OnClickListener { _, _ ->
-        // ライフサイクルを考慮するのが非常に面倒なため、ビューモデル経由で削除させる
         viewModel.removeHistory()
     }
 }

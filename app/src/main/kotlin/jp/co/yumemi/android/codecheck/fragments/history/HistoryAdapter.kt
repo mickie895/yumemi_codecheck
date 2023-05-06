@@ -11,7 +11,7 @@ import jp.co.yumemi.android.codecheck.data.history.SearchHistory
 import jp.co.yumemi.android.codecheck.databinding.LayoutHistoryItemBinding
 import java.text.DateFormat
 
-private val diff_util = object : DiffUtil.ItemCallback<SearchHistory>() {
+private val historyDiffUtil = object : DiffUtil.ItemCallback<SearchHistory>() {
     override fun areItemsTheSame(oldItem: SearchHistory, newItem: SearchHistory): Boolean {
         return oldItem.id == newItem.id
     }
@@ -24,7 +24,7 @@ private val diff_util = object : DiffUtil.ItemCallback<SearchHistory>() {
 /**
  * 履歴表示用のアダプタ
  */
-class HistoryAdapter(private val onHistoryClickedListener: OnHistoryClickedListener) : ListAdapter<SearchHistory, HistoryAdapter.HistoryViewHolder>(diff_util) {
+class HistoryAdapter(private val onHistoryClickedListener: OnHistoryClickedListener) : ListAdapter<SearchHistory, HistoryAdapter.HistoryViewHolder>(historyDiffUtil) {
     /**
      * 履歴のアイテムをクリックしたことが通知されるリスナ
      */

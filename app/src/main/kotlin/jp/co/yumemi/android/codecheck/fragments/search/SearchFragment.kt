@@ -2,9 +2,12 @@ package jp.co.yumemi.android.codecheck.fragments.search
 
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -24,16 +27,24 @@ import jp.co.yumemi.android.codecheck.viewmodels.SearchResultItem
  */
 @AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.OnItemClickListener {
+    // おおよそテンプレート化されている実装
 
-    private val viewModel: SearchFragmentViewModel by viewModels()
+    @VisibleForTesting
+    val viewModel: SearchFragmentViewModel by viewModels()
 
-    private lateinit var binding: FragmentSearchBinding
+    private var bindingSource: FragmentSearchBinding? = null
+    private val binding: FragmentSearchBinding get() = bindingSource!!
     private lateinit var adapter: SearchResultAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentSearchBinding.bind(view)
+        bindingSource = FragmentSearchBinding.bind(view)
+
+        // (UIテスト用コード)検索履歴一覧をobserveするとき、既に値がセットされているとオブザーバが反応する。
+        // 検索APIの制御用コードには初期値として空の検索結果を入れているため、
+        // 値の監視前に必ず一回分リソースのカウンタを増やす必要がある
+        viewModel.idlingResource.increment()
 
         // 値変化時の見た目の追従
         viewModel.searchedRepositoryList.observe(viewLifecycleOwner, searchResultObserver)
@@ -48,27 +59,40 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
         adapter = SearchResultAdapter(this)
 
         binding.recyclerView.layoutManager = layoutManager
+        // 区切り線を設ける
         binding.recyclerView.addItemDecoration(dividerItemDecoration)
         binding.recyclerView.adapter = adapter
 
-        // 検索欄の準備
-        binding.searchInputText
-            .setOnEditorActionListener { editText, action, _ ->
-                if (action == EditorInfo.IME_ACTION_SEARCH) {
-                    editText.text.toString().let {
-                        viewModel.search(it)
-                    }
-                    return@setOnEditorActionListener true
-                }
-                return@setOnEditorActionListener false
-            }
+        binding.searchInputText.setOnEditorActionListener(searchTextInput)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingSource = null
+    }
+
+    // 以下より詳細な実装
+
+    /**
+     * 検索欄で動きがあったときの対応
+     */
+    private val searchTextInput =
+        TextView.OnEditorActionListener { searchView: TextView, actionId: Int, _: KeyEvent? ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val text = searchView.text.toString()
+                viewModel.search(text)
+            }
+            false
+        }
 
     /**
      * 検索結果の更新を受け取ったときの処理
      */
     private val searchResultObserver: Observer<List<SearchResultItem>> = Observer {
-        adapter.submitList(it)
+        adapter.submitList(it) {
+            // (UIテスト用コード)検索の非同期処理が完了し、検索結果が新しくなった段階が次の非同期処理に進めるとき
+            viewModel.idlingResource.decrement()
+        }
     }
 
     /**
@@ -93,7 +117,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
     }
 
     /**
-     * 検索中かどうかを視覚的にわかりやすくするための書影
+     * 検索中かどうかを視覚的にわかりやすくするための処理
      */
     private val searchProgressObserver: Observer<Boolean> = Observer {
         binding.searchProgress.visibility = when (it) {
