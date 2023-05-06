@@ -22,4 +22,8 @@ class MockHistoryRepository : IHistoryRepository {
         val allItems = histories.count()
         emit(histories.subList(min(0, allItems - 10), allItems + 1))
     }
+
+    override suspend fun clearHistory() {
+        histories.clear()
+    }
 }

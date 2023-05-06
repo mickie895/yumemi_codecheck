@@ -8,7 +8,6 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import jp.co.yumemi.android.codecheck.data.search.restapi.GithubApiService
@@ -20,6 +19,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
+
+private const val searchText = "awesome"
 
 @HiltAndroidTest
 class MainPathTest {
@@ -52,13 +53,13 @@ class MainPathTest {
      */
     @Test
     fun testScreenChange() {
-        // ※ 基本的にLiveDataを始めとする、外部のライブラリをほぼそのまま使っているため、
-        // UI側のチェックする必要は少ない。
+        // ※ 基本的にLiveDataを始めとする、外部のライブラリを利用して表示を作っているため、
+        // 回転などのFragmentの作り直しにかかわる処理に対するテストは省略する。
         launchActivity<TopActivity>().use {
             mockedApi.setNextApiResult(sampleApiResult)
 
             // 最初は「検索が空」の画面のはずなので、クリックしても何もしない。
-            // (なにかしてたらこのあとのテストが続かないはず)
+            // (なにかしてたらこのあとのテストが続かない、空でもテストが続かない)
             Espresso.onView(ViewMatchers.withId(R.id.recyclerView)).perform(
                 RecyclerViewActions.actionOnItemAtPosition<SearchResultAdapter.SearchResultViewHolder>(
                     0,
@@ -68,7 +69,7 @@ class MainPathTest {
 
             // 適当な検索を行わせる。（※検索結果は差し替えられている）
             Espresso.onView(ViewMatchers.withId(R.id.searchInputText)).perform(
-                ViewActions.replaceText("awesome"),
+                ViewActions.replaceText(searchText),
                 ViewActions.pressImeActionButton(),
                 ViewActions.closeSoftKeyboard(),
             )
@@ -81,8 +82,13 @@ class MainPathTest {
                 ),
             )
 
-            // 表記の確認。
-            Espresso.onView(ViewMatchers.withId(R.id.repositoryName)).check(matches(isDisplayed()))
+            // リポジトリの名前があっていればOK（ずれていないことがわかる）
+            with(
+                Espresso.onView(ViewMatchers.withId(R.id.repositoryName)),
+            ) {
+                check(matches(ViewMatchers.isDisplayed()))
+                check(matches(ViewMatchers.withText("github/gitignore")))
+            }
         }
     }
 }
