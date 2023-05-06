@@ -1,8 +1,8 @@
-package jp.co.yumemi.android.codecheck.data.restapi
+package jp.co.yumemi.android.codecheck.data.search.restapi
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import jp.co.yumemi.android.codecheck.data.RepositorySearchResult
+import jp.co.yumemi.android.codecheck.data.search.RepositorySearchResult
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET

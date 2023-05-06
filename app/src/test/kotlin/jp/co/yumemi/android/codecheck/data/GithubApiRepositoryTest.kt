@@ -1,5 +1,7 @@
 package jp.co.yumemi.android.codecheck.data
 
+import jp.co.yumemi.android.codecheck.data.search.GithubApiRepository
+import jp.co.yumemi.android.codecheck.data.search.SearchApiResponse
 import jp.co.yumemi.android.codecheck.restapi.mock.getMockService
 import jp.co.yumemi.android.codecheck.restapi.mock.getServerErrorMockService
 import kotlinx.coroutines.test.runTest
@@ -16,16 +18,16 @@ class GithubApiRepositoryTest {
         val repository = GithubApiRepository(apiService)
 
         val queryResult = repository.searchQuery("git")
-        Assert.assertTrue("正常判定", queryResult is SearchApiResult.Ok)
+        Assert.assertTrue("正常判定", queryResult is SearchApiResponse.Ok)
 
         apiService.nextApiResult = emptyApiResult
         val emptyResult = repository.searchQuery("git")
-        Assert.assertTrue("空の結果も正常である", emptyResult is SearchApiResult.Ok)
+        Assert.assertTrue("空の結果も正常である", emptyResult is SearchApiResponse.Ok)
 
         apiService.nextApiResult = sampleErrorResult
         val errorResult = repository.searchQuery("git")
-        Assert.assertTrue("失敗を受け取れていることの確認", errorResult is SearchApiResult.Error)
-        Assert.assertTrue("失敗時は対応する返答を返す", errorResult is SearchApiResult.Error.ByQuery)
+        Assert.assertTrue("失敗を受け取れていることの確認", errorResult is SearchApiResponse.Error)
+        Assert.assertTrue("失敗時は対応する返答を返す", errorResult is SearchApiResponse.Error.ByQuery)
     }
 
     /**
@@ -37,7 +39,7 @@ class GithubApiRepositoryTest {
             getServerErrorMockService(sampleApiResult),
         )
         val errorResult = repository.searchQuery("git")
-        Assert.assertTrue("失敗を受け取れていることの確認", errorResult is SearchApiResult.Error)
-        Assert.assertTrue("失敗時は対応する返答を返す", errorResult is SearchApiResult.Error.ByQuery)
+        Assert.assertTrue("失敗を受け取れていることの確認", errorResult is SearchApiResponse.Error)
+        Assert.assertTrue("失敗時は対応する返答を返す", errorResult is SearchApiResponse.Error.ByQuery)
     }
 }

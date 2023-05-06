@@ -2,6 +2,8 @@ package jp.co.yumemi.android.codecheck.data
 
 // 各種検索結果
 
+fun sampleWith(total: Int = 10000): String = String.format(customApiResult, total)
+
 // 適当なタイミングで「git」で調べたときの検索結果
 const val sampleApiResult = """
         {
@@ -375,6 +377,76 @@ const val emptyApiResult = """
   "total_count": 0,
   "incomplete_results": false,
   "items": [
+    ]
+  }
+    """
+
+// 適当なタイミングで「git」で調べたときの検索結果
+private const val customApiResult = """
+        {
+  "total_count": %d,
+  "incomplete_results": true,
+  "items": [
+    {
+      "id": 1062897,
+      "name": "gitignore",
+      "full_name": "github/gitignore1",
+      "owner": {
+        "login": "github",
+        "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+        "html_url": "https://github.com/github"
+      },
+      "html_url": "https://github.com/github/gitignore",
+      "description": "A collection of useful .gitignore templates",
+      "stargazers_count": 143783,
+      "watchers_count": 143783,
+      "language": null,
+      "forks_count": 81984,
+      "open_issues_count": 376,
+      "forks": 81984,
+      "open_issues": 376,
+      "watchers": 143783
+    },
+    {
+      "id": 1062897,
+      "name": "gitignore",
+      "full_name": "github/gitignore2",
+      "owner": {
+        "login": "github",
+        "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+        "html_url": "https://github.com/github"
+      },
+      "html_url": "https://github.com/github/gitignore",
+      "description": "A collection of useful .gitignore templates",
+      "stargazers_count": 143783,
+      "watchers_count": 143783,
+      "language": null,
+      "forks_count": 81984,
+      "open_issues_count": 376,
+      "forks": 81984,
+      "open_issues": 376,
+      "watchers": 143783
+    },
+    {
+      "id": 1062897,
+      "name": "gitignore",
+      "full_name": "github/gitignore3",
+      "owner": {
+        "login": "github",
+        "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+        "html_url": "https://github.com/github"
+      },
+      "html_url": "https://github.com/github/gitignore",
+      "description": "A collection of useful .gitignore templates",
+      "stargazers_count": 143783,
+      "watchers_count": 143783,
+      "language": null,
+      "forks_count": 81984,
+      "open_issues_count": 376,
+      "forks": 81984,
+      "open_issues": 376,
+      "watchers": 143783
+    }
     ]
   }
     """

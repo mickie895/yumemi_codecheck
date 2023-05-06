@@ -3,9 +3,9 @@ package jp.co.yumemi.android.codecheck.restapi.mock
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import jp.co.yumemi.android.codecheck.data.RepositorySearchResult
-import jp.co.yumemi.android.codecheck.data.restapi.GithubApiService
-import jp.co.yumemi.android.codecheck.data.restapi.createRetrofit
+import jp.co.yumemi.android.codecheck.data.search.RepositorySearchResult
+import jp.co.yumemi.android.codecheck.data.search.restapi.GithubApiService
+import jp.co.yumemi.android.codecheck.data.search.restapi.createRetrofit
 import retrofit2.mock.BehaviorDelegate
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior

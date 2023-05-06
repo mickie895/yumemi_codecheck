@@ -6,4 +6,14 @@
     <string name="error_by_query">検索に失敗しました。入力を確認してください。</string>
     <string name="error_by_network">検索に失敗しました。ネットワークの状態を確認してください。</string>
     <string name="error_by_unknwoun_reason">何らかの理由で検索に失敗しました。開発者に連絡してください。</string>
+    <string name="empty_items">検索結果はありません。テキストを入力して検索してみてください。</string>
+    <string name="next_page">続きを表示する</string>
+    <string name="history">検索履歴</string>
+    <string name="clear_history">履歴クリア</string>
+    <string name="history_date_format">検索日時：%s</string>
+    <string name="menu_search">検索</string>
+    <string name="menu_history">履歴</string>
+    <string name="clear_history_confirm">履歴を削除します。よろしいですか？</string>
+    <string name="button_delete">削除</string>
+    <string name="button_cansel">キャンセル</string>
 </resources>

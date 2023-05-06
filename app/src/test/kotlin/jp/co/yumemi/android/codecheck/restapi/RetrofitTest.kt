@@ -1,7 +1,7 @@
 package jp.co.yumemi.android.codecheck.restapi
 
-import jp.co.yumemi.android.codecheck.data.restapi.GithubApiService
-import jp.co.yumemi.android.codecheck.data.restapi.createRetrofit
+import jp.co.yumemi.android.codecheck.data.search.restapi.GithubApiService
+import jp.co.yumemi.android.codecheck.data.search.restapi.createRetrofit
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Ignore

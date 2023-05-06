@@ -1,4 +1,4 @@
-package jp.co.yumemi.android.codecheck.data
+package jp.co.yumemi.android.codecheck.data.search
 
 import android.os.Parcelable
 import com.squareup.moshi.Json
@@ -16,8 +16,6 @@ data class RepositorySearchResult(
     val searchedItemList: List<RepositoryProperty>,
     @Json(name = "total_count")
     val totalCount: Int,
-    @Json(name = "incomplete_results")
-    val incompleteResults: Boolean,
 )
 
 /**
