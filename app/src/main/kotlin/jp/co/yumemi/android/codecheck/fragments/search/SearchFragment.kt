@@ -31,7 +31,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
     private val viewModel: SearchFragmentViewModel by viewModels()
 
     private var bindingSource: FragmentSearchBinding? = null
-    private val binding: FragmentSearchBinding = bindingSource!!
+    private val binding: FragmentSearchBinding get() = bindingSource!!
     private lateinit var adapter: SearchResultAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

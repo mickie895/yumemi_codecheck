@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * 検索履歴ん画面で使うviewModel
+ * 検索履歴の画面で使うviewModel
  */
 @HiltViewModel
 class HistoryFragmentViewModel @Inject constructor(
