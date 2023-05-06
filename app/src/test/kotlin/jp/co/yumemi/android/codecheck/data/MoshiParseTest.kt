@@ -4,6 +4,7 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import jp.co.yumemi.android.codecheck.data.search.RepositorySearchResult
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

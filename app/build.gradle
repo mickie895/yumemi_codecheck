@@ -86,7 +86,6 @@ dependencies {
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation 'io.ktor:ktor-client-android:2.3.0'
-
     implementation 'io.coil-kt:coil:2.3.0'
 
     testImplementation 'junit:junit:4.13.2'
@@ -94,12 +93,19 @@ dependencies {
     testImplementation 'androidx.arch.core:core-testing:2.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation "androidx.drawerlayout:drawerlayout:1.2.0"
 
     // linter
     ktlint 'com.pinterest:ktlint:0.49.0'
+
     // DIコンテナ関連
-    implementation "com.google.dagger:hilt-android:2.46"
-    kapt 'com.google.dagger:hilt-compiler:2.46'
+    // ※2.46にアップデートした際に何らかの破壊的変更があったらしく、作成時の最新バージョンだとRoomをコンパイルできなくなっている
+    // 参考：https://github.com/google/dagger/issues/3701
+
+    //noinspection GradleDependency
+    implementation "com.google.dagger:hilt-android:2.45"
+    //noinspection GradleDependency
+    kapt 'com.google.dagger:hilt-compiler:2.45'
 
     // RESTクライアント
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -107,6 +113,12 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
     implementation 'com.squareup.moshi:moshi-kotlin:1.14.0'
     testImplementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
+
+    // room
+    implementation 'androidx.room:room-runtime:2.5.1'
+    annotationProcessor "androidx.room:room-compiler:2.5.1"
+    kapt "androidx.room:room-compiler:2.5.1"
+    implementation 'androidx.room:room-ktx:2.5.1'
 }
 
 // Allow references to generated code

@@ -1,5 +1,7 @@
 package jp.co.yumemi.android.codecheck.data
 
+import jp.co.yumemi.android.codecheck.data.search.GithubApiRepository
+import jp.co.yumemi.android.codecheck.data.search.SearchApiResponse
 import jp.co.yumemi.android.codecheck.restapi.mock.getMockService
 import jp.co.yumemi.android.codecheck.restapi.mock.getServerErrorMockService
 import kotlinx.coroutines.test.runTest

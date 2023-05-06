@@ -22,7 +22,11 @@
         tools:layout="@layout/fragment_repository_show">
         <argument
             android:name="repository"
-            app:argType="jp.co.yumemi.android.codecheck.data.RepositoryProperty" />
+            app:argType="jp.co.yumemi.android.codecheck.data.search.RepositoryProperty" />
     </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="jp.co.yumemi.android.codecheck.fragments.history.HistoryFragment"
+        android:label="HistoryFragment" />
 
 </navigation>

@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import coil.load
 import jp.co.yumemi.android.codecheck.R
-import jp.co.yumemi.android.codecheck.data.RepositoryProperty
+import jp.co.yumemi.android.codecheck.data.search.RepositoryProperty
 import jp.co.yumemi.android.codecheck.databinding.FragmentRepositoryShowBinding
 
 /**

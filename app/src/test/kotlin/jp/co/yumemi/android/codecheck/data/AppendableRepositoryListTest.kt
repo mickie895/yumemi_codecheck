@@ -3,6 +3,8 @@ package jp.co.yumemi.android.codecheck.data
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import jp.co.yumemi.android.codecheck.data.search.AppendableRepositoryList
+import jp.co.yumemi.android.codecheck.data.search.RepositorySearchResult
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

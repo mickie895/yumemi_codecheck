@@ -1,4 +1,4 @@
-package jp.co.yumemi.android.codecheck.data
+package jp.co.yumemi.android.codecheck.data.search
 
 /**
  * 検索結果を追記可能にした、検索結果格納用クラス

@@ -1,4 +1,4 @@
-package jp.co.yumemi.android.codecheck.data
+package jp.co.yumemi.android.codecheck.data.search
 
 import android.os.Parcelable
 import com.squareup.moshi.Json
