@@ -141,7 +141,7 @@ class SearchFragmentViewModel @Inject constructor(
     /**
      * 検索APIを起動するときの共通処理
      */
-    private fun searchStrategy(strategy: suspend () -> SearchApiResponse): Job =
+    private fun searchStrategy(strategy: suspend () -> Unit): Job =
         viewModelScope.launch(Dispatchers.IO) {
             strategy()
         }
