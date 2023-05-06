@@ -41,7 +41,9 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
 
         bindingSource = FragmentSearchBinding.bind(view)
 
-        // 最初にからリポジトリの表示が入るから＋1からスタートされる
+        // (UIテスト用コード)検索履歴一覧をobserveするとき、既に値がセットされているとオブザーバが反応する。
+        // 検索APIの制御用コードには初期値として空の検索結果を入れているため、
+        // 値の監視前に必ず一回分リソースのカウンタを増やす必要がある
         viewModel.idlingResource.increment()
 
         // 値変化時の見た目の追従
@@ -88,6 +90,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
      */
     private val searchResultObserver: Observer<List<SearchResultItem>> = Observer {
         adapter.submitList(it) {
+            // (UIテスト用コード)検索の非同期処理が完了し、検索結果が新しくなった段階が次の非同期処理に進めるとき
             viewModel.idlingResource.decrement()
         }
     }

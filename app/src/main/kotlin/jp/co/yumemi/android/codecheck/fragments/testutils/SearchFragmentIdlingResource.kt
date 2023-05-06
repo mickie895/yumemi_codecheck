@@ -4,6 +4,7 @@ import androidx.test.espresso.IdlingResource
 
 /**
  * UIテストで処理を待機させるときのために直接導入する必要が出てしまっている関数のインタフェース
+ * 参考：https://developer.android.com/training/testing/espresso/idling-resource?hl=ja
  */
 interface SearchFragmentIdlingResource {
     fun increment()
