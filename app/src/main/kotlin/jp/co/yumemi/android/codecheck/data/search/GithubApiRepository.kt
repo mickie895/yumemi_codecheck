@@ -102,6 +102,8 @@ class GithubApiRepository @Inject constructor(private val apiService: GithubApiS
 
     /**
      * リポジトリ検索の一連の流れを共通化するための関数
+     *
+     * @param work APIを使った検索処理
      */
     private suspend fun searchStrategy(work: suspend () -> Unit): SearchApiResponse {
         val result =

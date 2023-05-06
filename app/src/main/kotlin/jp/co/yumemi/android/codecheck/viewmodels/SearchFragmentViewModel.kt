@@ -94,11 +94,17 @@ class SearchFragmentViewModel @Inject constructor(
         lastErrorSource.value = null
     }
 
+    /**
+     * リポジトリ層経由で検索を行う
+     */
     fun search(inputText: String) {
-        if (searchApi.searching) {
+        // 検索できない状態は予め弾いておく（空文字は確定でエラーなので弾くが、特殊文字は件数0が出たから放置する）
+        if (inputText.isEmpty() || searchApi.searching) {
             return
         }
         searchApi.startSearch()
+
+        // ※主にテストのためにUIスレッド外で動かす必要のある処理を切り出している
         postSearchJob(inputText)
     }
 

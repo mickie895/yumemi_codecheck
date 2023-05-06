@@ -10,6 +10,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * 検索履歴消去の確認用ダイアログのビューモデル
+ */
 @HiltViewModel
 class ClearHistoryViewModel @Inject constructor(
     private val historyRepository: IHistoryRepository,

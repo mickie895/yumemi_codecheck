@@ -13,7 +13,7 @@ import jp.co.yumemi.android.codecheck.R
 import jp.co.yumemi.android.codecheck.databinding.LayoutItemBinding
 import jp.co.yumemi.android.codecheck.viewmodels.SearchResultItem
 
-private val diff_util = object : DiffUtil.ItemCallback<SearchResultItem>() {
+private val searchDiffUtil = object : DiffUtil.ItemCallback<SearchResultItem>() {
     override fun areItemsTheSame(oldItem: SearchResultItem, newItem: SearchResultItem): Boolean {
         return oldItem.isSameItem(newItem)
     }
@@ -25,7 +25,7 @@ private val diff_util = object : DiffUtil.ItemCallback<SearchResultItem>() {
 
 class SearchResultAdapter(
     private val itemClickListener: OnItemClickListener,
-) : ListAdapter<SearchResultItem, SearchResultAdapter.SearchResultViewHolder>(diff_util) {
+) : ListAdapter<SearchResultItem, SearchResultAdapter.SearchResultViewHolder>(searchDiffUtil) {
 
     class SearchResultViewHolder(val binding: LayoutItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun getCurrentContext(): Context {

@@ -16,7 +16,7 @@ import jp.co.yumemi.android.codecheck.data.search.restapi.createRetrofit
 import javax.inject.Singleton
 
 // GithubAPIを利用するために必要なモジュールの準備を行うファイル
-// メンテナンス性のために一つのファイルに纏めている
+// メンテナンス性のためにプロジェクト固有のモジュールを一つのファイルに纏めている
 
 @Module
 @InstallIn(SingletonComponent::class)
