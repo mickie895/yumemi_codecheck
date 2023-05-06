@@ -33,13 +33,16 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
     val viewModel: SearchFragmentViewModel by viewModels()
 
     private var bindingSource: FragmentSearchBinding? = null
-    private val binding: FragmentSearchBinding = bindingSource!!
+    private val binding: FragmentSearchBinding get() = bindingSource!!
     private lateinit var adapter: SearchResultAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         bindingSource = FragmentSearchBinding.bind(view)
+
+        // 最初にからリポジトリの表示が入るから＋1からスタートされる
+        viewModel.idlingResource.increment()
 
         // 値変化時の見た目の追従
         viewModel.searchedRepositoryList.observe(viewLifecycleOwner, searchResultObserver)

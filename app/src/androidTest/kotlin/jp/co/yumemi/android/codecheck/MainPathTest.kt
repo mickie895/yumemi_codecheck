@@ -47,22 +47,41 @@ class MainPathTest {
         IdlingRegistry.getInstance().register(idlingResource.getInstance())
     }
 
+    /**
+     * 基本的な動作チェック
+     */
     @Test
     fun testScreenChange() {
+        // ※ 基本的にLiveDataを始めとする、外部のライブラリをほぼそのまま使っているため、
+        // UI側のチェックする必要は少ない。
         launchActivity<TopActivity>().use {
             mockedApi.setNextApiResult(sampleApiResult)
 
-            Espresso.onView(ViewMatchers.withId(R.id.searchInputText)).perform(
-                ViewActions.replaceText("awesome"),
-                ViewActions.pressImeActionButton(),
-                ViewActions.closeSoftKeyboard(),
-            )
+            // 最初は「検索が空」の画面のはずなので、クリックしても何もしない。
+            // (なにかしてたらこのあとのテストが続かないはず)
             Espresso.onView(ViewMatchers.withId(R.id.recyclerView)).perform(
                 RecyclerViewActions.actionOnItemAtPosition<SearchResultAdapter.SearchResultViewHolder>(
                     0,
                     click(),
                 ),
             )
+
+            // 適当な検索を行わせる。（※検索結果は差し替えられている）
+            Espresso.onView(ViewMatchers.withId(R.id.searchInputText)).perform(
+                ViewActions.replaceText("awesome"),
+                ViewActions.pressImeActionButton(),
+                ViewActions.closeSoftKeyboard(),
+            )
+
+            // 今度は最初の項目クリックで次画面へ移動する
+            Espresso.onView(ViewMatchers.withId(R.id.recyclerView)).perform(
+                RecyclerViewActions.actionOnItemAtPosition<SearchResultAdapter.SearchResultViewHolder>(
+                    0,
+                    click(),
+                ),
+            )
+
+            // 表記の確認。
             Espresso.onView(ViewMatchers.withId(R.id.repositoryName)).check(matches(isDisplayed()))
         }
     }
