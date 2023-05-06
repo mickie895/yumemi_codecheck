@@ -20,14 +20,18 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ProvideModule {
+object ApiModule {
 
     @Provides
     @Singleton
     fun provideApiService(): GithubApiService {
         return createRetrofit().create(GithubApiService::class.java)
     }
+}
 
+@Module
+@InstallIn(SingletonComponent::class)
+object HistoryModule {
     @Singleton
     @Provides
     fun provideHistoryDatabase(@ApplicationContext context: Context): HistoryDatabase {

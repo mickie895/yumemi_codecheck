@@ -1,13 +1,17 @@
 package jp.co.yumemi.android.codecheck.di
 
+import android.content.Context
+import androidx.room.Room
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import jp.co.yumemi.android.codecheck.data.restapi.GithubApiService
-import jp.co.yumemi.android.codecheck.data.restapi.createRetrofit
+import jp.co.yumemi.android.codecheck.data.history.room.HistoryDatabase
+import jp.co.yumemi.android.codecheck.data.search.restapi.GithubApiService
+import jp.co.yumemi.android.codecheck.data.search.restapi.createRetrofit
 import jp.co.yumemi.android.codecheck.restapi.mock.MockedGithubApiService
 import retrofit2.mock.BehaviorDelegate
 import retrofit2.mock.MockRetrofit
@@ -26,6 +30,19 @@ abstract class MockedApiModule {
     @Singleton
     @Binds
     abstract fun bindApiService(githubApiService: MockedGithubApiService): GithubApiService
+}
+
+@Module
+@TestInstallIn(
+    components = [SingletonComponent::class],
+    replaces = [HistoryModule::class],
+)
+object InMemoryHistoryModule {
+    @Singleton
+    @Provides
+    fun provideHistoryDatabase(@ApplicationContext context: Context): HistoryDatabase {
+        return Room.inMemoryDatabaseBuilder(context, HistoryDatabase::class.java).build()
+    }
 }
 
 /**

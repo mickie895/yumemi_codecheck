@@ -8,7 +8,7 @@ import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import jp.co.yumemi.android.codecheck.data.restapi.GithubApiService
+import jp.co.yumemi.android.codecheck.data.search.restapi.GithubApiService
 import jp.co.yumemi.android.codecheck.di.launchFragmentInHiltContainer
 import jp.co.yumemi.android.codecheck.fragments.search.SearchFragment
 import jp.co.yumemi.android.codecheck.fragments.testutils.SearchFragmentIdlingResource

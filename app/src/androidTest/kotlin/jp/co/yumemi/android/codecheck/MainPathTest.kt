@@ -11,7 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import jp.co.yumemi.android.codecheck.data.restapi.GithubApiService
+import jp.co.yumemi.android.codecheck.data.search.restapi.GithubApiService
 import jp.co.yumemi.android.codecheck.fragments.search.SearchResultAdapter
 import jp.co.yumemi.android.codecheck.fragments.testutils.SearchFragmentIdlingResource
 import jp.co.yumemi.android.codecheck.restapi.mock.MockedGithubApiService
@@ -58,7 +58,7 @@ class MainPathTest {
                 ViewActions.closeSoftKeyboard(),
             )
             Espresso.onView(ViewMatchers.withId(R.id.recyclerView)).perform(
-                RecyclerViewActions.actionOnItemAtPosition<SearchResultAdapter.ViewHolder>(
+                RecyclerViewActions.actionOnItemAtPosition<SearchResultAdapter.SearchResultViewHolder>(
                     0,
                     click(),
                 ),

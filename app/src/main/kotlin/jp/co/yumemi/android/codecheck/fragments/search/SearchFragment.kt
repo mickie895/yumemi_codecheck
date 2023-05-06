@@ -83,7 +83,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchResultAdapter.O
     /**
      * 検索結果の更新を受け取ったときの処理
      */
-    private val searchResultObserver: Observer<List<RepositoryProperty>> = Observer {
+    private val searchResultObserver: Observer<List<SearchResultItem>> = Observer {
         adapter.submitList(it) {
             viewModel.idlingResource.decrement()
         }
