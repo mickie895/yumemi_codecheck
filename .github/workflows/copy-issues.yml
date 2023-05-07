@@ -93,7 +93,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - id: output_milestones_data
       run: |
-        result=$(echo '${{ steps.get_milestones_data.outputs.data }}' | sed -z 's/\n/%0A/g' | sed -z 's/\r/%0D/g')
+        result=$(echo '${{ steps.get_milestones_data.outputs.data }}')
         echo "value=${result}" >> $GITHUB_OUTPUT
   get-issues:
     if: github.repository != 'yumemi-inc/android-engineer-codecheck'
@@ -134,7 +134,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - id: output_issues_data
       run: |
-        result=$(echo '${{ steps.get_issues_data.outputs.data }}' | sed -z 's/\n/%0A/g' | sed -z 's/\r/%0D/g')
+        result=$(echo '${{ steps.get_issues_data.outputs.data }}')
         echo "value=${result}" >> $GITHUB_OUTPUT
     - run: echo -e '${{ steps.output_issues_data.outputs.value }}'
 
