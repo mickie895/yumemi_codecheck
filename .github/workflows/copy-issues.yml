@@ -133,7 +133,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - id: output_issues_data
       run: |
-        result=$(echo '${{ steps.get_issues_data.outputs.data }}')
+        result=$(echo '${{ steps.get_issues_data.outputs.data }}' | sed -z 's/\n//g')
         echo "value=${result}" >> $GITHUB_OUTPUT
 
   create-issues:
