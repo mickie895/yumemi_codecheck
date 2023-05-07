@@ -113,9 +113,9 @@ jobs:
     - id: output_issues_data
       # milestoneが設定されているissueのみに絞る
       run: |
-        result=$(echo '${{ steps.get_issues_data.outputs.data }}' | jq -c '[.[] | select(has("milestone"))]')
+        result=$(echo '${{ steps.get_issues_data.outputs.data }}' | jq -c '[.[] | select(has("milestone")) | select(.milestone != null)]')
         echo "value=${result}" >> $GITHUB_OUTPUT
-    - run: echo -e '${{ steps.output_issues_data.outputs.value }}'
+    - run: echo '${{ steps.output_issues_data.outputs.value }} | jq'
 
   get-myrepo-issues:
     if: github.repository != 'yumemi-inc/android-engineer-codecheck'
