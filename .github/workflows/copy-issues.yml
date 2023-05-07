@@ -19,11 +19,13 @@ jobs:
     - id: output_label_data
       run: |
         result=$(echo '${{ steps.get_label_data.outputs.data }}' | sed -z 's/\n//g')
-        echo "::set-output name=value::${result}"
+        echo "value=${result}" >> $GITHUB_OUTPUT
 
   create-issue-labels:
     needs: get-issue-labels
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     strategy:
       matrix: 
         label: ${{ fromJson(needs.get-issue-labels.outputs.labels) }}
@@ -54,11 +56,13 @@ jobs:
     - id: output_milestones_data
       run: |
         result=$(echo '${{ steps.get_milestones_data.outputs.data }}' | sed -z 's/\n//g')
-        echo "::set-output name=value::${result}"
+        echo "value=${result}" >> $GITHUB_OUTPUT
 
   create-milestones:
     needs: get-milestones
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     strategy:
       matrix: 
         milestone: ${{ fromJson(needs.get-milestones.outputs.milestones) }}
@@ -87,9 +91,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - id: output_milestones_data
       run: |
-        result=$(echo '${{ steps.get_milestones_data.outputs.data }}' | sed -z 's/\n/%0A/g' | sed -z 's/\r/%0D/g')
-        echo "::set-output name=value::${result}"
-
+        result=$(echo '${{ steps.get_milestones_data.outputs.data }}' | sed -z 's/\n//g')
+        echo "value=${result}" >> $GITHUB_OUTPUT
   get-issues:
     if: github.repository != 'yumemi-inc/android-engineer-codecheck'
     runs-on: ubuntu-latest
@@ -107,9 +110,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - id: output_issues_data
       run: |
-        result=$(echo '${{ steps.get_issues_data.outputs.data }}' | sed -z 's/\n/%0A/g' | sed -z 's/\r/%0D/g')
-        echo "::set-output name=value::${result}"
-    - run: echo -e '${{ steps.output_issues_data.outputs.value }}'
+        result=$(echo '${{ steps.get_issues_data.outputs.data }}' | jq -c '[.[] | select(has("milestone")) | select(.milestone != null)]')
+        echo "value=${result}" >> $GITHUB_OUTPUT
 
   get-myrepo-issues:
     if: github.repository != 'yumemi-inc/android-engineer-codecheck'
@@ -128,13 +130,14 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - id: output_issues_data
       run: |
-        result=$(echo '${{ steps.get_issues_data.outputs.data }}' | sed -z 's/\n/%0A/g' | sed -z 's/\r/%0D/g')
-        echo "::set-output name=value::${result}"
-    - run: echo -e '${{ steps.output_issues_data.outputs.value }}'
+        result=$(echo '${{ steps.get_issues_data.outputs.data }}' | sed -z 's/\n//g')
+        echo "value=${result}" >> $GITHUB_OUTPUT
 
   create-issues:
     needs: [create-issue-labels, get-myrepo-milestones, get-issues, get-myrepo-issues]
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     strategy:
       max-parallel: 1
       matrix: 
@@ -145,16 +148,15 @@ jobs:
       run: |
         milestones='${{ needs.get-myrepo-milestones.outputs.milestones }}'
         milestone_number=$(echo ${milestones} | jq '.[] | select (.title=="${{ matrix.issue.milestone.title }}") | .number' )
-        echo "::set-output name=number::${milestone_number}"
+        echo "number=${milestone_number}" >> $GITHUB_OUTPUT
     - name: Create a issue
-      if: ${{ matrix.issue.pull_request == null }}
       run: |
         body=$(echo '${{ matrix.issue.body }}')
         body="${body//$'\n'/\\n}"
         body="${body//$'\r'/\\r}"
         
         if [[ "$body" =~ '#'[0-9] ]]; then
-            link=$(echo "$body" | grep -o "#[0-9]")
+            link=$(echo "$body" | grep -o "#[0-9]+")
             num=$(echo $link | tr -d '#')
 
             issues=$(echo '${{ needs.get-issues.outputs.issues }}' | jq '[ . as $d | keys[] | $d[.] + {index:.} ]')
