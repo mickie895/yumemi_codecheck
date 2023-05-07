@@ -111,7 +111,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - id: output_issues_data
-      # milestoneが設定されているissueのみに絞る
       run: |
         result=$(echo '${{ steps.get_issues_data.outputs.data }}' | jq -c '[.[] | select(has("milestone")) | select(.milestone != null)]')
         echo "value=${result}" >> $GITHUB_OUTPUT
@@ -153,8 +152,6 @@ jobs:
         milestone_number=$(echo ${milestones} | jq '.[] | select (.title=="${{ matrix.issue.milestone.title }}") | .number' )
         echo "number=${milestone_number}" >> $GITHUB_OUTPUT
     - name: Create a issue
-      # issue検索時にフィルタリングしているためここでのフィルタリングは不要になる。また、テスト用に一時的に出力を切っておく
-      if: false
       run: |
         body=$(echo '${{ matrix.issue.body }}')
         body="${body//$'\n'/\\n}"
@@ -182,5 +179,3 @@ jobs:
             \"labels\" : ${labels},
             \"milestone\" : ${{ steps.find-milestone.outputs.number }}
           }"
-    - name: Print issue for debug
-      run: echo '${{ matrix.issue.body }}'
