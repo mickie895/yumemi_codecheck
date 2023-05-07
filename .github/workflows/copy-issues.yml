@@ -93,7 +93,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - id: output_milestones_data
       run: |
-        result=$(echo '${{ steps.get_milestones_data.outputs.data }}')
+        result=$(echo '${{ steps.get_milestones_data.outputs.data }}' | sed -z 's/\n//g')
         echo "value=${result}" >> $GITHUB_OUTPUT
   get-issues:
     if: github.repository != 'yumemi-inc/android-engineer-codecheck'
@@ -115,7 +115,6 @@ jobs:
       run: |
         result=$(echo '${{ steps.get_issues_data.outputs.data }}' | jq -c '[.[] | select(has("milestone")) | select(.milestone != null)]')
         echo "value=${result}" >> $GITHUB_OUTPUT
-    - run: echo '${{ steps.output_issues_data.outputs.value }} | jq'
 
   get-myrepo-issues:
     if: github.repository != 'yumemi-inc/android-engineer-codecheck'
@@ -136,7 +135,6 @@ jobs:
       run: |
         result=$(echo '${{ steps.get_issues_data.outputs.data }}')
         echo "value=${result}" >> $GITHUB_OUTPUT
-    - run: echo -e '${{ steps.output_issues_data.outputs.value }}'
 
   create-issues:
     needs: [create-issue-labels, get-myrepo-milestones, get-issues, get-myrepo-issues]
