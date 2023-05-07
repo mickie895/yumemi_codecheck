@@ -19,7 +19,7 @@ jobs:
     - id: output_label_data
       run: |
         result=$(echo '${{ steps.get_label_data.outputs.data }}' | sed -z 's/\n//g')
-        echo "{value}={result}" >> $GITHUB_OUTPUT
+        echo "value=${result}" >> $GITHUB_OUTPUT
 
   create-issue-labels:
     needs: get-issue-labels
@@ -56,7 +56,7 @@ jobs:
     - id: output_milestones_data
       run: |
         result=$(echo '${{ steps.get_milestones_data.outputs.data }}' | sed -z 's/\n//g')
-        echo "{value}={result}" >> $GITHUB_OUTPUT
+        echo "value=${result}" >> $GITHUB_OUTPUT
 
   create-milestones:
     needs: get-milestones
@@ -92,7 +92,7 @@ jobs:
     - id: output_milestones_data
       run: |
         result=$(echo '${{ steps.get_milestones_data.outputs.data }}' | sed -z 's/\n/%0A/g' | sed -z 's/\r/%0D/g')
-        echo "{value}={result}" >> $GITHUB_OUTPUT
+        echo "value=${result}" >> $GITHUB_OUTPUT
   get-issues:
     if: github.repository != 'yumemi-inc/android-engineer-codecheck'
     runs-on: ubuntu-latest
@@ -112,7 +112,7 @@ jobs:
       # milestoneが設定されているissueのみに絞る
       run: |
         result=$(echo '${{ steps.get_issues_data.outputs.data }}' | jq '[.[] | select(has("milestone"))]' | sed -z 's/\n/%0A/g' | sed -z 's/\r/%0D/g')
-        echo "{value}={result}" >> $GITHUB_OUTPUT
+        echo "value=${result}" >> $GITHUB_OUTPUT
     - run: echo -e '${{ steps.output_issues_data.outputs.value }}'
 
   get-myrepo-issues:
@@ -133,7 +133,7 @@ jobs:
     - id: output_issues_data
       run: |
         result=$(echo '${{ steps.get_issues_data.outputs.data }}' | sed -z 's/\n/%0A/g' | sed -z 's/\r/%0D/g')
-        echo "{value}={result}" >> $GITHUB_OUTPUT
+        echo "value=${result}" >> $GITHUB_OUTPUT
     - run: echo -e '${{ steps.output_issues_data.outputs.value }}'
 
   create-issues:
@@ -151,7 +151,7 @@ jobs:
       run: |
         milestones='${{ needs.get-myrepo-milestones.outputs.milestones }}'
         milestone_number=$(echo ${milestones} | jq '.[] | select (.title=="${{ matrix.issue.milestone.title }}") | .number' )
-        echo "::set-output name=number::${milestone_number}"
+        echo "number=${milestone_number}" >> $GITHUB_OUTPUT
     - name: Create a issue
       # issue検索時にフィルタリングしているためここでのフィルタリングは不要になる。また、テスト用に一時的に出力を切っておく
       if: false
