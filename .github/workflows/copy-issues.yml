@@ -113,7 +113,7 @@ jobs:
     - id: output_issues_data
       # milestoneが設定されているissueのみに絞る
       run: |
-        result=$(echo '${{ steps.get_issues_data.outputs.data }}' | jq '[.[] | select(has("milestone"))]' | sed -z 's/\n/%0A/g' | sed -z 's/\r/%0D/g')
+        result=$(echo '${{ steps.get_issues_data.outputs.data }}' | jq '[.[] | select(has("milestone"))]')
         echo "value=${result}" >> $GITHUB_OUTPUT
     - run: echo -e '${{ steps.output_issues_data.outputs.value }}'
 
