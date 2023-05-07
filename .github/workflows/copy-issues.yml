@@ -105,8 +105,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - id: output_issues_data
+      # milestoneが設定されているissueのみに絞る
       run: |
-        result=$(echo '${{ steps.get_issues_data.outputs.data }}' | sed -z 's/\n/%0A/g' | sed -z 's/\r/%0D/g')
+        result=$(echo '${{ steps.get_issues_data.outputs.data }}' | jq '[.[] | select(has("milestone"))]' | sed -z 's/\n/%0A/g' | sed -z 's/\r/%0D/g')
         echo "{value}={result}" >> $GITHUB_OUTPUT
     - run: echo -e '${{ steps.output_issues_data.outputs.value }}'
 
@@ -146,14 +147,15 @@ jobs:
         milestone_number=$(echo ${milestones} | jq '.[] | select (.title=="${{ matrix.issue.milestone.title }}") | .number' )
         echo "::set-output name=number::${milestone_number}"
     - name: Create a issue
-      if: ${{ matrix.issue.pull_request == null }}
+      # issue検索時にフィルタリングしているためここでのフィルタリングは不要になる。また、テスト用に一時的に出力を切っておく
+      if: false
       run: |
         body=$(echo '${{ matrix.issue.body }}')
         body="${body//$'\n'/\\n}"
         body="${body//$'\r'/\\r}"
         
         if [[ "$body" =~ '#'[0-9] ]]; then
-            link=$(echo "$body" | grep -o "#[0-9]")
+            link=$(echo "$body" | grep -o "#[0-9]+")
             num=$(echo $link | tr -d '#')
 
             issues=$(echo '${{ needs.get-issues.outputs.issues }}' | jq '[ . as $d | keys[] | $d[.] + {index:.} ]')
@@ -174,3 +176,5 @@ jobs:
             \"labels\" : ${labels},
             \"milestone\" : ${{ steps.find-milestone.outputs.number }}
           }"
+    - name: Print issue for debug
+      run: echo '${{ matrix.issue.body }}'
